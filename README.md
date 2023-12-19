@@ -34,6 +34,20 @@
 ## Secure Azure AI Services
 ## Monitor Azure AI Services
 ## Deploy Azure AI services in containers
+ - Containers enable you to host Azure AI Services either on-premises or on Azure.
+ - A container is encapsulated in a container image that defines the software and configuration it must support. 
+ - Understand containers: A container comprises an application or service and the runtime components needed to run it, while abstracting the underlying operating system and hardware.
+   - Containers are portable across hosts
+   - A single container host can support multiple isolated containers
+   - Container deployment: A Docker* server, An Azure Container Instance (ACI), An Azure Kubernetes Service (AKS) cluster.
+ - Use Azure AI Services containers
+   - The container image for the specific Azure AI Services API you want to use is downloaded and deployed to a container host,
+   - Client applications submit data to the endpoint provided by the containerized service, and retrieve results just as they would from an Azure AI Services cloud resource in Azure.
+   - Periodically, usage metrics for the containerized service are sent to an Azure AI Services resource in Azure in order to calculate billing for the service.
+   - **note:** Even when using a container, you must provision an Azure AI Services resource in Azure for billing purposes.(possible senitive data don't go to Azure, but container needs to connect to azure for billing purpose)
+   - Azure AI Services container images: Each container provides a subset of Azure AI Services functionality.
+   - Azure AI Services container configuration: ApiKey(Key from your deployed Azure AI Service; used for billing.), Billing(	Endpoint URI from your deployed Azure AI Service; used for billing.), Eula(Value of accept to state you accept the license for the container.)
+   - Consuming Azure AI Services from a Container: adjust client apps such as endpoint, no need for subscription key, custom authentication solution, network security, etc
 ## Extract insights from text with the Azure AI Language service
 ## Translate text with Azure AI Translator service
 ## Create speech-enabled apps with Azure AI services
