@@ -49,6 +49,18 @@
    - Azure AI Services container configuration: ApiKey(Key from your deployed Azure AI Service; used for billing.), Billing(	Endpoint URI from your deployed Azure AI Service; used for billing.), Eula(Value of accept to state you accept the license for the container.)
    - Consuming Azure AI Services from a Container: adjust client apps such as endpoint, no need for subscription key, custom authentication solution, network security, etc
 ## Extract insights from text with the Azure AI Language service
+ - Language detection: determining the language in which text is written.
+   - keywords: **request: document(limit:5120 chars, 1000 items), item(countryHint, id, text). response: {language_name, language_code, confidence_score} -- multilingual content: predominant language , ambiguity: unknown & NaN**
+ - Key phrase extraction: identifying important words and phrases in the text that indicate the main points.
+   - limit: 5120 chars per document
+ - Sentiment analysis: quantifying how positive or negative the text is. (scenarios: reviews)
+   - keywords: **positive, negative, and neutral**
+   - If all sentences are neutral, the overall sentiment is neutral.
+   - If sentence classifications include only positive and neutral, the overall sentiment is positive.
+   - If the sentence classifications include only negative and neutral, the overall sentiment is negative.
+   - If the sentence classifications include positive and negative, the overall sentiment is mixed.
+ - Named entity recognition - detecting references to entities, including people, locations, DateTime, organizations, addresses, email, URLs, and more.
+ - Entity linking: identifying specific entities by providing reference links to Wikipedia articles.
 ## Translate text with Azure AI Translator service
 ## Create speech-enabled apps with Azure AI services
 ## Translate speech with the Azure AI Speech service
