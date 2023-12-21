@@ -103,21 +103,23 @@
    - Using the Azure AI Speech SDK (pattern):
      - SpeechConfig
      - AudioConfig (define the output device for the speech to be synthesized)
-     - SpeechSynthesizer (SpeechConfig + AudioConfig) : a proxy client for the Text to speech API.
+     - SpeechSynthesizer (SpeechConfig + AudioConfig): a proxy client for the Text to speech API.
      - use SpeechSynthesizer to call the underlying API functions
      - Process the response from the Azure AI Speech service:
        - AudioData
        - Properties
        - Reason ('SynthesizingAudioCompleted' | ...)
        - ResultId
- - Configure audio format and voices: When synthesizing speech, you can use a SpeechConfig object to customize the audio that is returned by the Azure AI Speech service.
+ - Configure audio format and voices: **When synthesizing speech**, you can use a SpeechConfig object to customize the audio that is returned by the Azure AI Speech service.
    - Audio format:
      - Audio file type
      - Sample-rate
      - Bit-depth
+     - To specify the required output format, use the **SetSpeechSynthesisOutputFormat** method of the **SpeechConfig** object
    - Voices:
      - Standard voices - synthetic voices created from audio samples.
      - Neural voices - more natural sounding voices created using deep neural networks.
+     - To specify a voice for speech synthesis in the **SpeechConfig**, set its **SpeechSynthesisVoiceName** property to the voice you want to use
  - Use Speech Synthesis Markup Language:
    - Specify a speaking style, such as "excited" or "cheerful" when using a neural voice.
    - Insert pauses or silence.
