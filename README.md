@@ -76,6 +76,55 @@
      - request parameters: `api-version`, `to`, `category`(your category ID)
      - request headers: `Ocp-Apim-Subscription-Key`, `Content-Type`
 ## Create speech-enabled apps with Azure AI services
+ - Azure AI Speech provides APIs that you can use to build speech-enabled applications
+   - Speech to text: An API that enables **speech recognition** in which your application can accept spoken input.
+   - Text to speech: An API that enables **speech synthesis** in which your application can provide spoken output.
+   - Speech Translation: An API that you can use to translate spoken input into multiple languages.
+   - Speaker Recognition: An API that enables your application to recognize individual speakers based on their voice.
+   - Intent Recognition: An API that uses conversational language understanding to determine the semantic meaning of spoken input.
+ - Use the Azure AI Speech to text API:The Azure AI Speech service supports speech recognition through two REST APIs:
+   - The Speech to text API, which is the primary way to perform speech recognition.
+   - The Speech to text Short Audio API, which is optimized for short streams of audio (up to 60 seconds).
+   - Using the Azure AI Speech SDK (consistent pattern):
+     - SpeechConfig (encapsulate the information required to connect to your Azure AI Speech resource.)
+     - AudioConfig (optional, define the input source for the audio to be transcribed. microphone or audio file)
+     - SpeechRecognizer (SpeechConfig + AudioConfig): a proxy client for the Speech to text API.
+     - use SpeechRecognizer to call the underlying API functions
+     - Process the response from the Azure AI Speech service:
+       - Duration
+       - OffsetInTicks
+       - Properties ('CancellationReason')
+       - Reason ('RecognizedSpeech' | 'NoMatch' | 'Canceled')
+       - ResultId
+       - Text (the transcript)
+ - Use the text to speech API:
+   - The Text to speech API, which is the primary way to perform speech synthesis.
+   - The Batch synthesis API, which is designed to support batch operations that convert large volumes of text to audio - for example to generate an audio-book from the source text.
+   - Using the Azure AI Speech SDK (pattern):
+     - SpeechConfig
+     - AudioConfig (define the output device for the speech to be synthesized)
+     - SpeechSynthesizer (SpeechConfig + AudioConfig) : a proxy client for the Text to speech API.
+     - use SpeechSynthesizer to call the underlying API functions
+     - Process the response from the Azure AI Speech service:
+       - AudioData
+       - Properties
+       - Reason ('SynthesizingAudioCompleted' | ...)
+       - ResultId
+ - Configure audio format and voices: When synthesizing speech, you can use a SpeechConfig object to customize the audio that is returned by the Azure AI Speech service.
+   - Audio format:
+     - Audio file type
+     - Sample-rate
+     - Bit-depth
+   - Voices:
+     - Standard voices - synthetic voices created from audio samples.
+     - Neural voices - more natural sounding voices created using deep neural networks.
+ - Use Speech Synthesis Markup Language:
+   - Specify a speaking style, such as "excited" or "cheerful" when using a neural voice.
+   - Insert pauses or silence.
+   - Specify phonemes (phonetic pronunciations), for example to pronounce the text "SQL" as "sequel".
+   - Adjust the prosody of the voice (affecting the pitch, timbre, and speaking rate).
+   - Use common "say-as" rules, for example to specify that a given string should be expressed as a date, time, telephone number, or other form.
+   - Insert recorded speech or audio, for example to include a standard recorded message or simulate background noise.
 ## Translate speech with the Azure AI Speech service
 ## Build a question answering solution
 ## Create a bot with the Bot Framework SDK
