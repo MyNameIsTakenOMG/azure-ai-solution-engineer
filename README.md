@@ -62,6 +62,19 @@
  - Named entity recognition - detecting references to entities, including people, locations, DateTime, organizations, addresses, email, URLs, and more.
  - Entity linking: identifying specific entities by providing reference links to Wikipedia articles.
 ## Translate text with Azure AI Translator service
+ - Understand language detection, translation, and transliteration(translate it to a different language, you may want to transliterate it to a different script in order to get accurate pronounciation)
+ - Specify translation options:
+   - Word alignment: to understand the relationship between the characters in the source text and the corresponding characters in the translation. 
+   - Sentence length: Sometimes it might be useful to know the length of a translation, for example to determine how best to display it in a user interface. You can get this information by setting the includeSentenceLength parameter to true.
+   - Profanity filtering: Sometimes text contains profanities, which you might want to obscure or omit altogether in a translation. You can handle profanities by specifying the profanityAction parameter
+     - NoAction
+     - Deleted
+     - Marked: Profanities are indicated using the technique indicated in the profanityMarker parameter (if supplied). The default value for this parameter is Asterisk, which replaces characters in profanities with "*". As an alternative, you can specify a profanityMarker value of Tag, which causes profanities to be enclosed in XML tags.
+ - Define custom translations: While the default translation model used by Azure AI Translator is effective for general translation, you may need to develop a translation solution for businesses or industries in that have specific vocabularies of terms that require custom translation.
+   - **note:** Your custom model is assigned a unique category Id (highlighted in the screenshot), which you can specify in translate calls to your Azure AI Translator resource by using the category parameter, causing translation to be performed by your custom model instead of the default model.
+   - call custom translator API:
+     - request parameters: `api-version`, `to`, `category`(your category ID)
+     - request headers: `Ocp-Apim-Subscription-Key`, `Content-Type`
 ## Create speech-enabled apps with Azure AI services
 ## Translate speech with the Azure AI Speech service
 ## Build a question answering solution
