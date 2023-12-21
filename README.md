@@ -128,6 +128,24 @@
    - Use common "say-as" rules, for example to specify that a given string should be expressed as a date, time, telephone number, or other form.
    - Insert recorded speech or audio, for example to include a standard recorded message or simulate background noise.
 ## Translate speech with the Azure AI Speech service
+ - Translate speech to text:
+   - SpeechTranslationConfig: encapsulate the information required to connect to your Azure AI Speech resource. Specifically, its location and key, also used to specify the speech recognition language (the language in which the input speech is spoken) and the target languages into which it should be translated.
+   - AudioConfig(Optional): define the input source for the audio to be transcribed. By default, this is the default system microphone, but you can also specify an audio file.
+   - TranslationRecognizer(SpeechTranslationConfig + AudioConfig): a proxy client for the Azure AI Speech translation API.
+   - Use the methods of the TranslationRecognizer object to call the underlying API functions.
+   - Process the response from Azure AI Speech. In the case of the RecognizeOnceAsync() method, the result is a SpeechRecognitionResult object that includes the following properties:
+     - Duration
+     - OffsetInTicks
+     - Properties
+     - Reason ('RecognizedSpeech'|'NoMatch'|'Cancelled')
+     - ResultId
+     - Text
+     - Translations
+ - Synthesize translations
+   - Event-based synthesis: When you want to perform **1:1** translation (translating from one source language into a single target language), you can use event-based synthesis to capture the translation as an audio stream. Specify the desired voice for the translated speech in the TranslationConfig. Create an event handler for the TranslationRecognizer object's Synthesizing event. In the event handler, use the GetAudio() method of the Result parameter to retrieve the byte stream of translated audio.
+   - Manual synthesis: essentially just the combination of two separate operations:
+     - Use a TranslationRecognizer to translate spoken input into text transcriptions in one or more target languages.
+     - Iterate through the Translations dictionary in the result of the translation operation, using a SpeechSynthesizer to synthesize an audio stream for each language.
 ## Build a question answering solution
 ## Create a bot with the Bot Framework SDK
 ## Create a Bot with the Bot Framework Composer
