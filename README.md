@@ -147,6 +147,28 @@
      - Use a TranslationRecognizer to translate spoken input into text transcriptions in one or more target languages.
      - Iterate through the Translations dictionary in the result of the translation operation, using a SpeechSynthesizer to synthesize an audio stream for each language.
 ## Build a question answering solution
+ - Understand question answering: The Azure **AI Language** service includes a **question answering** capability, which enables you to define a **knowledge base** of question and answer pairs that can be queried using natural language input. The knowledge base can be published to a REST endpoint and consumed by client applications, commonly **bots**.
+   - The knowledge base can be created from existing sources: FAQ website, Files containing structured text, Built-in chit chat question and answer pairs that encapsulate common conversational exchanges.
+ - Compare question answering to Azure AI Language understanding: A question answering knowledge base is a form of language model, which raises the question of when to use question answering, and when to use the conversational language understanding capabilities of the Azure AI Language service. The two features are similar in that they both enable you to define a language model that can be queried using natural language expressions. The two services are in fact complementary. You can build comprehensive natural language solutions that combine conversational language understanding models and question answering knowledge bases.
+   - Question answering: a static answer to a known question
+   - conversational language understanding: Response indicates the most likely intent and referenced entities
+ - Create a knowledge base:
+   - Create an Azure AI Language resource in your Azure subscription( question answering feature, Create or select an Azure Cognitive Search resource to host the knowledge base index.).
+   - In Azure AI Language Studio, select the Language resource and create a Custom question answering project (add data source, create knowledge base and edit Q&A pair).
+ - Implement multi-turn conversation: sometimes you might need to ask follow-up questions to elicit more information from a user before presenting a definitive answer. This kind of interaction is referred to as a multi-turn conversation.
+ - Test and publish a knowledge base: After you have defined a knowledge base, you can train its natural language model, and test it before publishing it for use in an application or bot.
+ - Use a knowledge base: add a 'question' property in a request body
+ - Improve question answering performance: After creating and testing a knowledge base, you can improve its performance with active learning and by defining synonyms.
+   - Use active learning: Active learning can help you make continuous improvements so that it gets better at answering user questions correctly over time.
+     - Implicit feedback: As incoming requests are processed, the service identifies user-provided questions that have multiple, similarly scored matches in the knowledge base. These are automatically clustered as alternate phrase suggestions for the possible answers that you can accept or reject in the Suggestions page for your knowledge base in Azure AI Language Studio.
+     - Explicit feedback:
+       - When developing a client application you can control the number of possible question matches returned for the user's input by specifying the **top** parameter. 
+       - The response from the service includes a question object for each possible match, up to the **top** value specified in the request
+       - You can implement logic in your client app to compare the score property values for the questions, and potentially present the questions to the user so they can positively identify the question closest to what they intended to ask.
+       - With the correct question identified, your app can use the REST API to send feedback containing suggested alternative phrasing based on the user's original input.
+       - The **qnaId** in the feedback corresponds to the **id** of the question the user identified as the correct match. The **userId** parameter is an identifier for the user and can be any value you choose, such as an email address or numeric identifier. The feedback will be presented in the active learning **Suggestions** page for your knowledge base in Azure AI Language Studio for you to accept or reject.
+   - Define synonyms: Synonyms are useful when question submitted by users might include multiple different words to mean the same thing. To define synonyms, you must use the REST API to submit synonyms in the following JSON format.
+ - Create a question answering bot: A bot is a conversational application that enables users to interact using natural language through one or more **channels**, such as email, web chat, voice messaging, or social media platform such as Microsoft Teams. To create a bot from your knowledge base, use Azure AI Language Studio to deploy the bot and then use the Create Bot button to create a bot in your Azure subscription. You can then edit and customize your bot in the Azure portal.
 ## Create a bot with the Bot Framework SDK
 ## Create a Bot with the Bot Framework Composer
 ## Analyze images
