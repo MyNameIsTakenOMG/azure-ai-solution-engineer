@@ -170,6 +170,49 @@
    - Define synonyms: Synonyms are useful when question submitted by users might include multiple different words to mean the same thing. To define synonyms, you must use the REST API to submit synonyms in the following JSON format.
  - Create a question answering bot: A bot is a conversational application that enables users to interact using natural language through one or more **channels**, such as email, web chat, voice messaging, or social media platform such as Microsoft Teams. To create a bot from your knowledge base, use Azure AI Language Studio to deploy the bot and then use the Create Bot button to create a bot in your Azure subscription. You can then edit and customize your bot in the Azure portal.
 ## Create a bot with the Bot Framework SDK
+ - Introduce principles of bot design: Before embarking on the development of a bot, it's worth spending some time considering some principles for effective bot design.
+   - Factors influencing a bot's success:
+     - Is the bot discoverable? Discoverability can be achieved through integration with the proper channels. 
+     - Is the bot intuitive and easy to use? The more difficult or frustrating a bot interaction is, the less use it will receive. Users will not return to a bad user experience.
+     - Is the bot available on the devices and platforms that users care about? Knowing your customer-base is a good start to address this consideration. 
+     - Can users solve their problems with minimal use and bot interaction? Although it may seem counter-intuitive, success doesn't equate to how long a user interacts with the bot. Users want answers to their issues or problems as quickly as possible. 
+     - Does the bot solve the user issues better than alternative experiences? If a user can reach an answer with minimal effort through other means, they are less likely to use the bot.
+   - Factors that do not guarantee success
+     - Perhaps you want to ensure you have support for speech so that users don't have to type text for the interaction. Demonstrating factors such as these, may impress fellow developers, but are less likely to impress users. They could lead to user experience issues as well. The ability to support every language and dialect is not possible at this time. Speaker pronunciation and speed can greatly impact the accuracy. A user interacting with the bot in language that is not their native language can create issues in recognition. Other factors where speech enabled bots can be problematic are in noisy environments. Background noise will impact the accuracy of speech recognition and could create issues for the user in hearing the bot responses. Use voice only where it truly makes sense for bot user interaction.
+     - Consider the concept of simplicity. The more complex your bot is, in terms of AI or machine learning features, the more open it may be to issues and problems. Consider adding advanced machine learning features to the bot if they are necessary to solve the problems the bot is designed to address.
+     - Adding natural language features may not always make the bot experience great. A simple bot, that solves the user's problem without any conversational aspects, is still a successful bot.
+   - Considerations for responsible AI
+     - Articulate the purpose of your bot and take special care if your bot will support consequential use cases.
+     - Be transparent about the fact that you use bots as part of your product or service.
+     - Ensure a seamless hand-off to a human where the human-bot exchange leads to interactions that exceed the bot's competence.
+     - Design your bot so that it respects relevant cultural norms and guards against misuse.
+     - Ensure your bot is reliable.
+     - Ensure your bot treats people fairly.
+     - Ensure your bot respects user privacy.
+     - Ensure your bot handles data securely.
+     - Ensure your bot is accessible.
+     - Accept responsibility for your bots operation and how it affects people.
+ - Get started with the Bot Framework SDK:
+   - Bot solutions on Microsoft Azure are supported by the following technologies:
+     - Azure AI Bot Service. A cloud service that enables bot delivery through one or more channels, and integration with other services.
+     - Bot Framework Service. A component of Azure AI Bot Service that provides a REST API for handling bot activities.
+     - Bot Framework SDK. A set of tools and libraries for end-to-end bot development that abstracts the REST interface, enabling bot development in a range of programming languages.
+   - Developing a Bot with the Bot Framework SDK: The Bot Framework SDK provides an extensive set of tools and libraries that software engineers can use to develop bots.
+     - Bot templates
+       - Empty Bot - a basic bot skeleton.
+       - Echo Bot - a simple "hello world" sample in which the bot responds to messages by echoing the message text back to the user.
+       - Core Bot - a more comprehensive bot that includes common bot functionality, such as integration with the Language Understanding service.
+     - Bot application classes and logic
+       - The template bots are based on the **Bot** class defined in the Bot Framework SDK, which is used to implement the logic in your bot that receives and interprets user input, and responds appropriately. Additionally, bots make use of an **Adapter** class that handles communication with the user's channel. Conversations in a bot are composed of **activities**, which represent events such as a user joining a conversation or a message being received. These activities occur within the context of a **turn**, a two-way exchange between the user and bot. The Bot Framework Service notifies your bot's adapter when an activity occurs in a channel by calling its **Process Activity** method, and the adapter creates a context for the turn and calls the bot's **Turn Handler** method to invoke the appropriate logic for the activity. 
+     - Testing with the Bot Framework Emulator
+       - Bots developed with the Bot Framework SDK are designed to run as cloud services in Azure, but while developing your bot, you'll need a way to test it before you deploy it into production. The Bot Framework Emulator is an application that enables you to run your bot local or remote web applications and connect to it from an interactive web chat interface that you can use to test your bot. Details of activity events are captured and shown in the testing interface, so you can monitor your bots behavior as you submit messages and review the responses.
+ - Implement activity handlers and dialogs: The logic for processing the activity can be implemented in multiple ways. The Bot Framework SDK provides classes that can help you build bots that manage conversations using
+   - Activity handlers: Event methods that you can override to handle different kinds of activities.
+     - For simple bots with short, stateless interactions, you can use Activity Handlers to implement an event-driven conversation model in which the events are triggered by activities such as users joining the conversation or a message being received. When an activity occurs in a channel, the Bot Framework Service calls the bot adapter's **Process Activity** function, passing the activity details. The adapter creates a turn context for the activity and passes it to the bot's turn handler, which calls the individual, event-specific activity handler. The **ActivityHandler** base class includes event methods for the many kinds of common activity, including: Message received, Members left the conversation...
+     - Turn context: An activity occurs within the context of a **turn**, which represents a single two-way exchange between the user and the bot. Activity handler methods include a parameter for the **turn context**, which you can use to access relevant information. For example, the activity handler for a message received activity includes the text of the message.
+   - Dialogs: For more complex conversational flows where you need to store **state** between turns to enable a **multi-turn conversation**, you can implement **dialogs**. The Bot Framework SDK dialogs library provides multiple dialog classes that you can combine to implement the required conversational flow for your bot.
+     - Component dialogs: A **component** dialog is a dialog that can contain other dialogs, defined in its **dialog set**. Often, the initial dialog in the component dialog is a **waterfall** dialog, which defines a sequential series of steps to guide the conversation. It's common for each step to be a **prompt** dialog so that conversational flow consists of gathering input data from the user sequentially. Each step must be completed before passing the output onto the next step
+     - Adaptive dialogs
 ## Create a Bot with the Bot Framework Composer
 ## Analyze images
 ## Analyze video
