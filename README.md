@@ -267,6 +267,18 @@
      - Sporting Events: Hero card, Adaptive card, Video card
    - Presenting responses with the Bot Framework Composer: All responses that your bot presents to users are listed for the current (or parent) dialog. At the root of the bot, it uses what's called **language generator** (lg) to create the responses. You use templates to define responses (viewed by clicking `Show code` for the selected dialog within Composer), which can include multiple phrases for a given type of response, or specific graphical responses.
 ## Analyze images
+ - Provision an Azure AI Vision resource: The Azure AI Vision service is designed to help you extract information from images. It provides functionality that you can use for:
+   - Description and tag generation
+   - Object detection
+   - People detection
+   - Image metadata, color, and type analysis
+   - Category identification
+   - Background removal
+   - Moderation rating
+   - Optical character recognition
+   - Smart thumbnail generation
+ - Analyze an image: To analyze an image, you can use the **Analyze Image** REST method or the equivalent method in the SDK for your preferred programming language, specifying the visual features you want to include in the analysis (and if you select categories, whether or not to include details of celebrities or landmarks). This method returns a JSON document containing the requested information.
+ - Generate a smart-cropped thumbnail: Thumbnails are often used to provide smaller versions of images in applications and websites. The Azure AI Vision service enables you to create a thumbnail with different dimensions (and aspect ratio) from the source image, and optionally to use image analysis to determine the region of interest in the image (its main subject) and make that the focus of the thumbnail. This ability to determine the region of interest is especially useful when cropping the image to change its aspect ratio.
 ## Analyze video
 ## Classify images
 ## Detect objects in images
