@@ -280,6 +280,22 @@
  - Analyze an image: To analyze an image, you can use the **Analyze Image** REST method or the equivalent method in the SDK for your preferred programming language, specifying the visual features you want to include in the analysis (and if you select categories, whether or not to include details of celebrities or landmarks). This method returns a JSON document containing the requested information.
  - Generate a smart-cropped thumbnail: Thumbnails are often used to provide smaller versions of images in applications and websites. The Azure AI Vision service enables you to create a thumbnail with different dimensions (and aspect ratio) from the source image, and optionally to use image analysis to determine the region of interest in the image (its main subject) and make that the focus of the thumbnail. This ability to determine the region of interest is especially useful when cropping the image to change its aspect ratio.
 ## Analyze video
+ - Understand Azure Video Indexer capabilities: The Azure Video Indexer service is designed to help you extract information from videos. It provides functionality that you can use for:
+   - Facial recognition - detecting the presence of individual people in the image. This requires Limited Access approval.
+   - Optical character recognition - reading text in the video.
+   - Speech transcription - creating a text transcript of spoken dialog in the video.
+   - Topics - identification of key topics discussed in the video.
+   - Sentiment - analysis of how positive or negative segments within the video are.
+   - Labels - label tags that identify key objects or themes throughout the video.
+   - Content moderation - detection of adult or violent themes in the video.
+   - Scene segmentation - a breakdown of the video into its constituent scenes.
+ - Extract custom insights: Azure Video Indexer includes predefined models that can recognize well-known celebrities, do OCR, and transcribe spoken phrases into text. You can extend the recognition capabilities of Video Analyzer by creating custom models for:
+   - People. Add images of the faces of people you want to recognize in videos, and train a model. Video Indexer will then recognize these people in all of your videos.
+   - Language. If your organization uses specific terminology that may not be in common usage, you can train a custom model to detect and transcribe it.
+   - Brands. You can train a model to recognize specific names as brands, for example to identify products, projects, or companies that are relevant to your business.
+ - Use Video Analyzer widgets and APIs: While you can perform all video analysis tasks in the Azure Video Indexer portal, you may want to incorporate the service into custom applications. There are two ways you can accomplish this:
+   - Azure Video Indexer widgets: The widgets used in the Azure Video Indexer portal to play, analyze, and edit videos can be embedded in your own custom HTML interfaces. You can use this technique to share insights from specific videos with others without giving them full access to your account in the Azure Video Indexer portal.
+   - Azure Video Indexer API: Azure Video Indexer provides a REST API that you can use to obtain information about your account, including an access token.
 ## Classify images
 ## Detect objects in images
 ## Detect, analyze, and recognize faces
