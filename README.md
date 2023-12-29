@@ -297,6 +297,24 @@
    - Azure Video Indexer widgets: The widgets used in the Azure Video Indexer portal to play, analyze, and edit videos can be embedded in your own custom HTML interfaces. You can use this technique to share insights from specific videos with others without giving them full access to your account in the Azure Video Indexer portal.
    - Azure Video Indexer API: Azure Video Indexer provides a REST API that you can use to obtain information about your account, including an access token.
 ## Classify images
+ - Provision Azure resources for Azure AI Custom Vision: The Azure AI Custom Vision service enables you to `build your own computer vision models` for **image classification** or **object detection**.
+   - Creating an Azure AI Custom Vision solution involves two tasks:
+     - Use existing (labeled) images to train an Azure AI Custom Vision model.
+     - Create a client application that submits new images to your model to generate predictions.
+   - To use the Azure AI Custom Vision service, you must provision two kinds of Azure resource:
+     - A **training resource** (used to train your models). This can be: **An Azure AI Services resource**./**An Azure AI Custom Vision (Training) resource**.
+     - A **prediction resource**, used by client applications to get predictions from your model. This can be: **An Azure AI Services resource.**/**An Azure AI Custom Vision (Prediction) resource.**
+   - You can use a single **Azure AI Services** resource for both training and prediction, and you can mix-and-match resource types (for example, using an **Azure AI Custom Vision (Training) resource** to train a model that you then publish using an **Azure AI Services resource**).
+ - Understand image classification: Image classification is a computer vision technique in which a model is trained to predict a class label for an image based on its contents. Usually, the class label relates to the main subject of the image. Models can be trained for multiclass classification (in other words, there are multiple classes, but each image can belong to only one class) or multilabel classification (in other words, an image might be associated with multiple labels).
+ - Train an image classifier: To train an image classification model with the Azure AI Custom Vision service, you can use the Azure AI Custom Vision portal, the Azure AI Custom Vision REST API or SDK, or a combination of both approaches.
+   - In most cases, you'll typically use the Azure AI Custom Vision portal to train your model.
+     - Create an image classification project for your model and associate it with a training resource.
+     - Upload images, assigning class label tags to them.
+     - Review and edit tagged images.
+     - Train and evaluate a classification model.
+     - Test a trained model.
+     - Publish a trained model to a prediction resource.
+   - **The REST API and SDKs enable you to perform the same tasks by writing code, which is useful if you need to automate model training and publishing as part of a DevOps process.**
 ## Detect objects in images
 ## Detect, analyze, and recognize faces
 ## Read Text in images and documents with the Azure AI Vision Service
