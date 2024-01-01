@@ -372,6 +372,21 @@
      - Verify the identity of a detected face.
      - Analyze new images to find faces that are similar to a known, `persisted` face.
 ## Read Text in images and documents with the Azure AI Vision Service
+ - Explore Azure AI Vision options for reading text: Azure AI provides two different features that read text from documents and images, one in the Azure AI Vision Service, the other in Azure AI Document Intelligence. There is overlap in what each service provides, however each is optimized for results depending on what the input is.
+   - Image Analysis Optical character recognition (OCR):
+     - Use this feature for general, unstructured documents with smaller amount of text, or images that contain text.
+     - Results are returned immediately (synchronous) from a single API call.
+     - Has functionality for analyzing images past extracting text, including object detection, describing or categorizing an image, generating smart-cropped thumbnails and more.
+     - Examples include: street signs, handwritten notes, and store signs.
+   - Document Intelligence:
+     - Use this service to read small to large volumes of text from images and PDF documents.
+     - This service uses context and structure of the document to improve accuracy.
+     - The initial function call returns an asynchronous operation ID, which must be used in a subsequent call to retrieve the results.
+     - Examples include: receipts, articles, and invoices.
+ - Use the Read API
+   - To use the Read OCR feature, call the ImageAnalysis function (REST API or equivalent SDK method), passing the image URL or binary data, and optionally specifying a gender neutral caption or the language the text is written in (with a default value of en for English).
+   - To make an OCR request to ImageAnalysis, specify the analysis features as TEXT.
+   - The results of the Read OCR function are returned synchronously, either as JSON or the language specific object of a similar structure. These results are provided as a complete result and broken down by `page, then words, and then lines`. Additionally, the text values are included at both the `line` and `word` levels, making it easier to read entire lines of text if you don't need to extract text at the individual `word` level.
 ## Extract data from forms with Azure Document Intelligence
 ## Create an Azure AI Search solution
 ## Create a custom skill for Azure AI Search
