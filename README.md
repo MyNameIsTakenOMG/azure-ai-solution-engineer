@@ -326,6 +326,51 @@
    - Bounding box measurement units: If you choose to use a labeling tool other than the Azure AI Custom Vision portal, you may need to adjust the output to match the measurement units expected by the Azure AI Custom Vision API. Bounding boxes are defined by four values that represent the left (X) and top (Y) coordinates of the top-left corner of the bounding box, and the width and height of the bounding box. These values are expressed as **proportional** values relative to the source image size. 
 
 ## Detect, analyze, and recognize faces
+ - Identify options for face detection analysis and identification
+   - There are two Azure AI services that you can use to build solutions that detect faces or people in images.
+     - The Azure AI Vision service:  enables you to detect people in an image, as well as returning a bounding box for its location.
+     - The Face service:
+       - Face detection (with bounding box).
+       - Comprehensive facial feature analysis (including head pose, presence of spectacles, blur, facial landmarks, occlusion and others).
+       - Face comparison and verification.
+       - Facial recognition.
+ - Understand considerations for face analysis
+   - When building a solution that uses facial data, considerations include (but are not limited to):
+     - Data privacy and security. Facial data is personally identifiable, and should be considered sensitive and private. You should ensure that you have implemented adequate protection for facial data used for model training and inferencing.
+     - Transparency. Ensure that users are informed about how their facial data will be used, and who will have access to it.
+     - Fairness and inclusiveness. Ensure that you face-based system cannot be used in a manner that is prejudicial to individuals based on their appearance, or to unfairly target individuals.
+ - Detect faces with the Azure AI Vision service
+   - To detect and analyze faces with the Azure AI Vision service, call the **Analyze Image** function (SDK or equivalent REST method), specifying People as one of the visual features to be returned.
+ - Understand capabilities of the face service: The Face service provides comprehensive facial detection, analysis, and recognition capabilities.
+   - The Face service provides functionality that you can use for:
+     - Face detection - for each detected face, the results include an ID that identifies the face and the bounding box coordinates indicating its location in the image.
+     - Face attribute analysis - you can return a wide range of facial attributes, including:
+       - Head pose (pitch, roll, and yaw orientation in 3D space)
+       - Glasses (NoGlasses, ReadingGlasses, Sunglasses, or Swimming Goggles)
+       - Blur (low, medium, or high)
+       - Exposure (underExposure, goodExposure, or overExposure)
+       - Noise (visual noise in the image)
+       - Occlusion (objects obscuring the face)
+       - Accessories (glasses, headwear, mask)
+       - QualityForRecognition (low, medium, or high)
+     - Facial landmark location - coordinates for key landmarks in relation to facial features (for example, eye corners, pupils, tip of nose, and so on)
+     - Face comparison - you can compare faces across multiple images for similarity (to find individuals with similar facial features) and verification (to determine that a face in one image is the same person as a face in another image)
+     - Facial recognition - you can train a model with a collection of faces belonging to specific individuals, and use the model to identify those people in new images.
+     - Facial liveness - liveness can be used to determine if the input video is a real stream or a fake to prevent bad intentioned individuals from spoofing the recognition system.
+ - Compare and match detected faces: When a face is detected by the Face service, an ID is assigned to it and retained in the service resource for 24 hours. The ID is a GUID, with no indication of the individual's identity other than their facial features.
+   - While the detected face ID is cached, subsequent images can be used to compare the new faces to the cached identity and determine if they are similar (in other words, they share similar facial features) or to verify that the same person appears in two images.
+   - This ability to compare faces anonymously can be useful in systems where it's important to confirm that the same person is present on two occasions, without the need to know the actual identity of the person. For example, by taking images of people as they enter and leave a secured space to verify that everyone who entered leaves.
+ - Implement facial recognition
+   - For scenarios where you need to positively identify individuals, you can train a facial recognition model using face images.
+   - To train a facial recognition model with the Face service:
+     - Create a `Person Group` that defines the set of individuals you want to identify (for example, employees).
+     - Add a `Person` to the Person Group for each individual you want to identify.
+     - Add detected faces from multiple images to each person, preferably in various poses. The IDs of these faces will no longer expire after 24 hours (so they're now referred to as `persisted faces`).
+     - Train the model.
+   - The trained model is stored in your Face (or Azure AI Services) resource, and can be used by client applications to:
+     - Identify individuals in images.
+     - Verify the identity of a detected face.
+     - Analyze new images to find faces that are similar to a known, `persisted` face.
 ## Read Text in images and documents with the Azure AI Vision Service
 ## Extract data from forms with Azure Document Intelligence
 ## Create an Azure AI Search solution
