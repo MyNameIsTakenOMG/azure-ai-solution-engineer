@@ -388,6 +388,43 @@
    - To make an OCR request to ImageAnalysis, specify the analysis features as TEXT.
    - The results of the Read OCR function are returned synchronously, either as JSON or the language specific object of a similar structure. These results are provided as a complete result and broken down by `page, then words, and then lines`. Additionally, the text values are included at both the `line` and `word` levels, making it easier to read entire lines of text if you don't need to extract text at the individual `word` level.
 ## Extract data from forms with Azure Document Intelligence
+ - What is Azure Document Intelligence? Azure Document Intelligence is one of many Azure AI Services, cloud-based artificial intelligence (AI) services with REST APIs and client library SDKs that can be used to build intelligence into your applications. Azure Document Intelligence uses Optical Character Recognition (OCR) capabilities and deep learning models to extract text, key-value pairs, selection marks, and tables from documents. OCR captures document structure by creating bounding boxes around detected objects in an image. The locations of the bounding boxes are recorded as coordinates in relation to the rest of the page. Azure Document Intelligence services return bounding box data and other information in a structured form with the relationships from the original file. To build a high-accuracy model from scratch, people need to build deep learning models, use a large amount of compute resources, and face long model training times. These factors could make a project infeasible. Azure Document Intelligence provides underlying models that have been trained on thousands of form examples. The underlying models enable you to do high-accuracy data extraction from your forms with little to no model training.
+   - Azure Document Intelligence service components:
+     - Document analysis models: which take an input of JPEG, PNG, PDF, and TIFF files and return a JSON file with the location of text in bounding boxes, text content, tables, selection marks (also known as checkboxes or radio buttons), and document structure.
+     - Prebuilt models: which detect and extract information from document images and return the extracted data in a structured JSON output. Azure Document Intelligence currently supports prebuilt models for several forms, including: W-2 forms, Invoices, Receipts, ID documents, Business cards.
+     - Custom models: custom models extract data from forms specific to your business. Custom models can be trained through the Azure Document Intelligence Studio.
+ - Get started with Azure Document Intelligence
+   - Subscribe to a resource: A Azure AI Service resource / A Azure Document Intelligence resource
+   - Understand Azure Document Intelligence file input requirements:
+     - Format must be JPG, PNG, BMP, PDF (text or scanned), or TIFF.
+     - The file size must be less than 500 MB for paid (S0) tier and 4 MB for free (F0) tier.
+     - Image dimensions must be between 50 x 50 pixels and 10000 x 10000 pixels.
+     - The total size of the training data set must be 500 pages or less.
+   - Decide what component of Azure Document Intelligence to use: After you have collected your files, decide what you need to accomplish.
+     - To use OCR capabilities to capture document analysis, use the Layout model, Read model, or General Document model.
+     - To create an application that extracts data from W-2s, Invoices, Receipts, ID documents, Health insurance, vaccination, and business cards, use a prebuilt model. These models do not need to be trained. Azure Document Intelligence services analyze the documents and return a JSON output.
+     - To create an application to extract data from your industry-specific forms, create a custom model. This model needs to be trained on sample documents. After training, the custom model can analyze new documents and return a JSON output.
+ - Train custom models: Azure's Azure Document Intelligence service supports supervised machine learning. You can train custom models and create composite models with form documents and JSON documents that contain labeled fields. To train a custom model:
+   - Store sample forms in an Azure blob container, along with JSON files containing layout and label field information
+     - You can generate an ocr.json file for each sample form using the Azure Document Intelligence's Analyze document function. Additionally, you need a single fields.json file describing the fields you want to extract, and a labels.json file for each sample form mapping the fields to their location in that form.
+   - Generate a shared access security (SAS) URL for the container.
+   - Use the Build model REST API function (or equivalent SDK method).
+   - Use the Get model REST API function (or equivalent SDK method) to get the trained model ID.
+   - **Or**, Use the Azure Document Intelligence Studio to label and train. There are two types of underlying models for custom forms custom template models or custom neural models.
+     - Custom template models accurately extract labeled key-value pairs, selection marks, tables, regions, and signatures from documents. Training only takes a few minutes, and more than 100 languages are supported.
+     - Custom neural models are deep learned models that combine layout and language features to accurately extract labeled fields from documents.This model is best for **semi-structured or unstructured documents**.
+ - Use Azure Document Intelligence models
+   - Using the API: To extract form data using a custom model, use the **analyze document** function of either a supported SDK, or the REST API, while supplying model ID (generated during model training). This function starts the form analysis. which you can then request the result to get the analysis. A successful JSON response contains **analyzeResult** that contains the content extracted and an array of pages containing information about the document content.
+   - Understanding confidence scores
+     - If the confidence values of the analyzeResult are low, try to improve the quality of your input documents. Depending on the use case, you might find that a confidence score of 80% or higher is acceptable for a low-risk application. For more sensitive cases, like reading medical records or billing statements, a score of 100% is recommended.
+ - Use the Azure Document Intelligence Studio
+   - The Azure Document Intelligence Studio currently supports the following projects:
+     - Document analysis models:
+       - Read: Extract printed and handwritten text lines, words, locations, and detected languages from documents and images.
+       - Layout: Extract text, tables, selection marks, and structure information from documents (PDF and TIFF) and images (JPG, PNG, and BMP).
+       - General Documents: Extract key-value pairs, selection marks, and entities from documents.
+     - Prebuilt models: To extract data from common forms(W-2s, Invoices, Receipts, ID documents, Health insurance, vaccination, and business cards.) with prebuilt models
+     - Custom models: When you use Azure Document Intelligence Studio to build custom models, **the ocr.json files, labels.json files, and fields.json** file needed for training are automatically created and stored in your storage account.
 ## Create an Azure AI Search solution
 ## Create a custom skill for Azure AI Search
 ## Create a knowledge store with Azure AI Search
