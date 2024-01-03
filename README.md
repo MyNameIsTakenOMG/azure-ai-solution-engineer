@@ -488,6 +488,14 @@
    - Custom scoring and result boosting: By default, search results are sorted by a relevance score that is calculated based on a term-frequency/inverse-document-frequency (TF/IDF) algorithm. You can customize the way this score is calculated by defining a **scoring profile** that applies a weighting value to specific fields - essentially increasing the search score for documents when the search term is found in those fields. Additionally, you can boost results based on field values - for example, increasing the relevancy score for documents based on how recently they were modified or their file size. After you've defined a scoring profile, you can specify its use in an individual search, or you can modify an index definition so that it uses your custom scoring profile by default.
    - Synonyms: Often, the same thing can be referred to in multiple ways. To help users find the information they need, you can define `synonym maps` that link related terms together. You can then apply those synonym maps to individual fields in an index, so that when a user searches for a particular term, documents with fields that contain the term or any of its synonyms will be included in the results.
 ## Create a custom skill for Azure AI Search
+ - Create a custom skill: Your custom skill must implement the expected schema for input and output data that is expected by skills in an Azure AI Search skillset.
+   - Input Schema: The input schema for a custom skill defines a JSON structure containing a record for each document to be processed. Each document has a unique identifier, and a data payload with one or more inputs
+   - Output schema: The schema for the results returned by your custom skill reflects the input schema. It is assumed that the output contains a record for each input record, with either the results produced by the skill or details of any errors that occurred. The output value in this schema is a `property bag` that can contain any JSON structure, reflecting the fact that index fields aren't necessarily simple data values, but can contain complex types.
+ - Add a custom skill to a skillset: To integrate a custom skill into your indexing solution, you must add a skill for it to a skillset using the Custom.WebApiSkill skill type.The skill definition must:
+   - Specify the URI to your web API endpoint, including parameters and headers if necessary.
+   - Set the context to specify at which point in the document hierarchy the skill should be called
+   - Assign input values, usually from existing document fields
+   - Store output in a new field, optionally specifying a target field name (otherwise the output name is used)
 ## Create a knowledge store with Azure AI Search
 ## Enrich a search index using Language Studio
 ## Implement advanced search features in Azure Cognitive Search
