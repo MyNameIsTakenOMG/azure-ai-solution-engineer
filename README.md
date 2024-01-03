@@ -426,6 +426,67 @@
      - Prebuilt models: To extract data from common forms(W-2s, Invoices, Receipts, ID documents, Health insurance, vaccination, and business cards.) with prebuilt models
      - Custom models: When you use Azure Document Intelligence Studio to build custom models, **the ocr.json files, labels.json files, and fields.json** file needed for training are automatically created and stored in your storage account.
 ## Create an Azure AI Search solution
+ - Manage capacity: To create an Azure AI Search solution, you need to create an Azure AI Search resource in your Azure subscription. Depending on the specific solution you intend to build, you may also need Azure resources for data storage and other application services.
+   - Service tiers and capacity management: When you create an Azure AI Search resource, you must specify a `pricing tier`. The pricing tier you select determines the capacity limitations of your search service and the configuration options available to you, as well as the cost of the service. The available pricing tiers are:
+     - Free (F). Use this tier to explore the service or try the tutorials in the product documentation.
+     - Basic (B): Use this tier for small-scale search solutions that include a maximum of 15 indexes and 2 GB of index data.
+     - Standard (S): Use this tier for enterprise-scale solutions. There are multiple variants of this tier, including S, S2, and S3; which offer increasing capacity in terms of indexes and storage, and S3HD, which is optimized for fast read performance on smaller numbers of indexes.
+     - Storage Optimized (L): Use a storage-optimized tier (L1 or L2) when you need to create large indexes, at the cost of higher query latency.
+   - Replicas and partitions: Depending on the pricing tier you select, you can optimize your solution for scalability and availability by creating replicas and partitions. The combination of replicas and partitions you configure determines the search units used by your solution. Put simply, the number of search units is the number of replicas multiplied by the number of partitions (R x P = SU). For example, a resource with four replicas and three partitions is using 12 search units.
+     - `Replicas` are instances of the search service - you can think of them as nodes in a cluster. Increasing the number of replicas can help ensure there is sufficient capacity to service multiple concurrent query requests while managing ongoing indexing operations.
+     - `Partitions` are used to divide an index into multiple storage locations, enabling you to split I/O operations such as querying or rebuilding an index.
+ - Understand search components
+   - Data source: Azure AI Search supports multiple types of data source, including:
+     - Unstructured files in Azure blob storage containers.
+     - Tables in Azure SQL Database.
+     - Documents in Cosmos DB.
+     - `Alternatively, applications can push JSON data directly into an index, without pulling it from an existing data store.`
+   - Skillset: In Azure AI Search, you can apply artificial intelligence (AI) skills as part of the indexing process to enrich the source data with new information, which can be mapped to index fields. The skills used by an indexer are encapsulated in a skillset that defines an enrichment pipeline in which each step enhances the source data with insights obtained by a specific AI skill. Examples of the kind of information that can be extracted by an AI skill include:
+     - The language in which a document is written.
+     - Key phrases that might help determine the main themes or topics discussed in a document.
+     - A sentiment score that quantifies how positive or negative a document is.
+     - Specific locations, people, organizations, or landmarks mentioned in the content.
+     - AI-generated descriptions of images, or image text extracted by optical character recognition.
+     - Custom skills that you develop to meet specific requirements.
+   - Indexer: The indexer is the engine that drives the overall indexing process. It takes the outputs extracted using the skills in the skillset, along with the data and metadata values extracted from the original data source, and maps them to fields in the index. An indexer is automatically run when it is created, and can be scheduled to run at regular intervals or run on demand to add more documents to the index. In some cases, such as when you add new fields to an index or new skills to a skillset, you may need to reset the index before re-running the indexer.
+   - Index: The index is the searchable result of the indexing process. It consists of a collection of JSON documents, with fields that contain the values extracted during indexing. Client applications can query the index to retrieve, filter, and sort information. Each index field can be configured with the following attributes:
+     - key: Fields that define a unique key for index records.
+     - searchable: Fields that can be queried using full-text search.
+     - filterable: Fields that can be included in filter expressions to return only documents that match specified constraints.
+     - sortable: Fields that can be used to order the results.
+     - facetable: Fields that can be used to determine values for facets (user interface elements used to filter the results based on a list of known field values).
+     - retrievable: Fields that can be included in search results (by default, all fields are retrievable unless this attribute is explicitly removed).
+ - Understand the indexing process: The indexing process works by creating a `document` for each indexed entity. During indexing, an enrichment pipeline iteratively builds the documents that combine metadata from the data source with enriched fields extracted by cognitive skills. You can think of each indexed document as a JSON structure, which initially consists of a `document` with the index fields you have mapped to fields extracted directly from the source data. When the documents in the data source contain images, you can configure the indexer to extract the image data and place each image in a `normalized_images` collection. Normalizing the image data in this way enables you to use the collection of images as an input for skills that extract information from image data. Each skill adds fields to the document, so for example a skill that detects the `language` in which a document is written might store its output in a `language` field. The document is structured hierarchically, and the skills are applied to a specific `context` within the hierarchy, enabling you to run the skill for each item at a particular level of the document. The output fields from each skill can be used as inputs for other skills later in the pipeline, which in turn store their outputs in the document structure. The fields in the final document structure at the end of the pipeline are mapped to index fields by the indexer in one of two ways:
+   - Fields extracted directly from the source data are all mapped to index fields. These mappings can be implicit (fields are automatically mapped to in fields with the same name in the index) or explicit (a mapping is defined to match a source field to an index field, often to rename the field to something more useful or to apply a function to the data value as it is mapped).
+   - Output fields from the skills in the skillset are explicitly mapped from their hierarchical location in the output to the target field in the index.
+ - Search an index
+   - Full-text search: Full text search describes search solutions that parse text-based document contents to find query terms. Full text search queries in Azure AI Search are based on the Lucene query syntax, which provides a rich set of query operations for searching, filtering, and sorting data in indexes. Azure AI Search supports two variants of the Lucene syntax:
+     - Simple - An intuitive syntax that makes it easy to perform basic searches that match literal query terms submitted by a user.
+     - Full - An extended syntax that supports complex filtering, regular expressions, and other more sophisticated queries.
+     - Client applications submit queries to Azure AI Search by specifying a search expression along with other parameters that determine how the expression is evaluated and the results returned. Some common parameters submitted with a query include:
+       - search - A search expression that includes the terms to be found.
+       - queryType - The Lucene syntax to be evaluated (simple or full).
+       - searchFields - The index fields to be searched.
+       - select - The fields to be included in the results.
+       - searchMode - Criteria for including results based on multiple search terms. For example, suppose you search for `comfortable hotel`. A searchMode value of Any returns documents that contain "comfortable", "hotel", or both; while a searchMode value of All restricts results to documents that contain both "comfortable" and "hotel".
+     - Query parsing. The search expression is evaluated and reconstructed as a tree of appropriate subqueries. Subqueries might include term queries, phrase queries, and prefix queries.
+     - Lexical analysis: The query terms are analyzed and refined based on linguistic rules. For example, text is converted to lower case and nonessential stopwords (such as "the", "a", "is", and so on) are removed. Then words are converted to their root form (for example, "comfortable" might be simplified to "comfort") and composite words are split into their constituent terms.
+     - Document retrieval: The query terms are matched against the indexed terms, and the set of matching documents is identified.
+     - Scoring: A relevance score is assigned to each result based on a term frequency/inverse document frequency (TF/IDF) calculation.
+ - Apply filtering and sorting
+   - Filtering results
+     - You can apply filters to queries in two ways:
+       - By including filter criteria in a simple search expression.
+       - By providing an OData filter expression as a $filter parameter with a full syntax search expression.
+     - Filtering with facets: Facets are a useful way to present users with filtering criteria based on field values in a result set. They work best when a field has a small number of discrete values that can be displayed as links or options in the user interface. Facets are a useful way to present users with filtering criteria based on field values in a result set. They work best when a field has a small number of discrete values that can be displayed as links or options in the user interface.
+   - Sorting results: By default, results are sorted based on the relevancy score assigned by the query process, with the highest scoring matches listed first. However, you can override this sort order by including an OData orderby parameter that specifies one or more sortable fields and a sort order (asc or desc).
+ - Enhance the index
+   - Search-as-you-type: By adding a `suggester` to an index, you can enable two forms of search-as-you-type experience to help users find relevant results more easily:
+     - Suggestions - retrieve and display a list of suggested results as the user types into the search box, without needing to submit the search query.
+     - Autocomplete - complete partially typed search terms based on values in index fields.
+     - After you've added a suggester, you can use the suggestion and autocomplete REST API endpoints or SDK methods to submit a partial search term and retrieve a list of suggested results or autocompleted terms to display in the user interface. 
+   - Custom scoring and result boosting: By default, search results are sorted by a relevance score that is calculated based on a term-frequency/inverse-document-frequency (TF/IDF) algorithm. You can customize the way this score is calculated by defining a **scoring profile** that applies a weighting value to specific fields - essentially increasing the search score for documents when the search term is found in those fields. Additionally, you can boost results based on field values - for example, increasing the relevancy score for documents based on how recently they were modified or their file size. After you've defined a scoring profile, you can specify its use in an individual search, or you can modify an index definition so that it uses your custom scoring profile by default.
+   - Synonyms: Often, the same thing can be referred to in multiple ways. To help users find the information they need, you can define `synonym maps` that link related terms together. You can then apply those synonym maps to individual fields in an index, so that when a user searches for a particular term, documents with fields that contain the term or any of its synonyms will be included in the results.
 ## Create a custom skill for Azure AI Search
 ## Create a knowledge store with Azure AI Search
 ## Enrich a search index using Language Studio
