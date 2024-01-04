@@ -509,9 +509,13 @@
    - Object projections are JSON representations of the indexed documents.
    - File projections are JPEG files containing image data extracted from documents.
    - Table projections create a relational schema for the extracted data.
-
-
 ## Enrich a search index using Language Studio
+ - Explore the available features of Azure AI Language
+   - Classify text
+   - Understand questions and conversational language
+   - Extract information
+   - Summarize text
+   - Translate text
 ## Implement advanced search features in Azure Cognitive Search
 ## Build an Azure Machine Learning custom skill for Azure Cognitive Search
 ## Search data outside the Azure platform in Azure Cognitive Search using Azure Data Factory
