@@ -511,11 +511,16 @@
    - Table projections create a relational schema for the extracted data.
 ## Enrich a search index using Language Studio
  - Explore the available features of Azure AI Language
-   - Classify text
-   - Understand questions and conversational language
-   - Extract information
-   - Summarize text
-   - Translate text
+   - Language Studio features:
+     - Classify text
+     - Understand questions and conversational language
+     - Extract information
+     - Summarize text
+     - Translate text
+     - Features can be either preconfigured or customizable. Preconfigured features can be tested straight away with a demo-like environment directly inside Language Studio. You can use them straight out of the box. The other features with * and green cogs in their logo need user customization. They require you to train their models so they fit your data better. After you have train them, you deploy and can then use them to power your apps or use the same demo-like testing environment.
+   - Test and use preconfigured language features
+   - Create, train, and deploy a conversation language understanding model
+ - Enrich a cognitive search index with custom classes and Language Studio
 ## Implement advanced search features in Azure Cognitive Search
 ## Build an Azure Machine Learning custom skill for Azure Cognitive Search
 ## Search data outside the Azure platform in Azure Cognitive Search using Azure Data Factory
