@@ -521,6 +521,23 @@
    - Test and use preconfigured language features
    - Create, train, and deploy a conversation language understanding model
  - Enrich a cognitive search index with custom classes and Language Studio
+   - Custom text classification allows you to map a passage of text to different user defined classes. For example, you could train a model on the synopsis on the back cover of books to automatically identify a books genre. You then use that identified genre to enrich your online shop search engine with a genre facet.
+     - Store your documents so they can be accessed by Language Studio and Azure Cognitive Search indexers
+     - Create a custom text classification project
+     - Train and test your model
+     - Create a search index based on your stored documents
+     - Create a function app that uses your deployed trained model --> this is the custom skill which needs to be added to the skillset
+       - There are five things the function app needs to know:
+         - The text to be classified.
+         - The endpoint for your trained custom text classification deployed model.
+         - The primary key for the custom text classification project.
+         - The project name.
+         - The deployment name.
+     - Update your search solution, your index, indexer, and custom skillset:
+       - You need to add a field to your index to store the custom text classification enrichment.
+       - You need to add a custom skillset to call your function app with the text to classify.
+       - You need to map the response from the skillset into the index.
+
 ## Implement advanced search features in Azure Cognitive Search
 ## Build an Azure Machine Learning custom skill for Azure Cognitive Search
 ## Search data outside the Azure platform in Azure Cognitive Search using Azure Data Factory
