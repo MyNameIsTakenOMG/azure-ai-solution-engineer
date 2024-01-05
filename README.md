@@ -539,6 +539,87 @@
        - You need to map the response from the skillset into the index.
 
 ## Implement advanced search features in Azure Cognitive Search
+ - Improve the ranking of a document with term boosting
+   - Search an index: Azure Cognitive Search lets you query an index using a REST endpoint or inside the Azure portal with the search explorer tool. The querying processing consists of:
+     - Query Parsing
+       - Write a simple query
+       - Enable the Lucene Query Parser: You can tell the search explorer to use the Lucene Query parser by adding `&queryType=full` to the query string. With the Lucene syntax, you can write more precise queries. Here is a summary of available features:
+         - Boolean operators: AND, OR, NOT for example luxury AND 'air con'
+         - Fielded search: fieldName:search term for example Description:luxury AND Tags:air con
+         - Fuzzy search: ~ for example Description:luxury~ returns results with misspelled versions of luxury
+         - Term proximity search: "term1 term2"~n for example "indoor swimming pool"~3 returns documents with the words indoor swimming pool within three words of each other
+         - Regular expression search: /regular expression/ use a regular expression between / for example /[mh]otel/ would return documents with hotel and motel
+         - Wildcard search: *, ? where * will match many characters and ? matches a single character for example 'air con'* would find air con and air conditioning
+         - Precedence grouping: (term AND (term OR term)) for example (Description:luxury OR Category:luxury) AND Tags:air?con*
+         - Term boosting: ^ for example Description:luxury OR Category:luxury^3 would give hotels with the category luxury a higher score than luxury in the description
+       - Boost search terms: Using the above you can improve the results. The parser should give a higher priority to hotels in the luxury category. You can also be more precise and look for air conditioning in the Tags field. (eg. `^3` or `.*` are used to boost scores)
+     - lexical Analysis
+     - Document Retrieval
+     - Scoring
+ - Improve the relevance of results by adding scoring profiles
+   - How search scores are calculated: Scoring is the last phase of processing a search query. The search engine scores the documents returned from the first three phases. The score is a function of the number of times identified search terms appear in a document, the document's size, and the rarity of each of the terms. By default, the search results are ordered by their search score, highest first. If two documents have an identical search score, you can break the tie by adding an $orderby clause.
+   - Improve the score for more relevant documents: As the default scoring works on the frequency of terms and rarity, the final calculated score might not return the highest score for the most relevant document. Each dataset is different, so Cognitive Search lets you influence a document score using scoring profiles. The most straightforward scoring profile defines different weights for fields in an index. In the above example, the Hotel index has a scoring profile that has the Description field five times more relevant than data in the Location or Rooms fields. The Category field is twice as relevant as the HotelName. The scoring profile can also include functions, for example, distance or freshness. Functions provide more control than simple weighting, for example, you can define the boosting duration applied to newer documents before they score the same as older documents. The power of scoring profiles means that instead of boosting a specific term in a search request, you can apply a scoring profile to an index so that fields are boosted automatically for all queries.
+   - Add a weighted scoring profile: You can add up to 100 scoring profiles to a search index. The simplest way to create a scoring profile is in the Azure portal. You can control which scoring profile is applied to a search query by appending the `&scoringProfile=PROFILE NAME` parameter.
+     - Navigate to your search service.
+     - Select Indexes, then select the index to add a scoring profile to.
+     - Select Scoring profiles.
+     - Select + Add scoring profile.
+     - In Profile name, enter a unique name.
+     - To set the scoring profile as a default to be applied to all searches select Set as default profile.
+     - In Field name, select a field. Then for Weight, enter a weight value.
+     - Select Save.
+   - Use functions in a scoring profile
+     - Magnitude:	Alter scores based on a range of values for a numeric field
+     - Freshness:	Alter scores based on the freshness of documents as given by a DateTimeOffset field
+     - Distance:	Alter scores based on the distance between a reference location and a GeographyPoint field
+     - Tag:	Alter scores based on common tag values in documents and queries
+ - Improve an index with analyzers and tokenized terms: Here, you'll learn how to define a custom analyzer to control how the content of a field is split into tokens for inclusion in the index.
+   - Analyzers in Cognitive Search: When Cognitive Search indexes your content, it retrieves text. To build a useful index, with terms that help users locate documents, that text needs processing.
+     - The text should be broken into words, often by using whitespace and punctuation characters as delimiters.
+     - Stopwords, such as "the" and "it", should be removed because users don't search for them.
+     - Words should be reduced to their root form.
+     - If you don't specify an analyzer for a field, the default Lucene analyzer is used.
+     - Built-in analyzers are of two types:
+       - Language analyzers. If you need advanced capabilities for specific languages, such as lemmatization, word decompounding, and entity recognition, use a built-in language analyzer. Microsoft provides 50 analyzers for different languages.
+       - Specialized analyzers. These analyzers are language-agnostic and used for specialized fields such as zip codes or product IDs. You can, for example, use the PatternAnalyzer and specify a regular expression to match token separators.
+   - What is a custom analyzer? The built-in analyzers provide you with many options but sometimes you need an analyzer with unusual behavior for a field. In these cases, you can create a custom analyzer. A custom analyzer consists of:
+     - Character filters. These filters process a string before it reaches the tokenizer. There are three character filters that you can use:
+       - html_strip. This filter removes HTML constructs such as tags and attributes.
+       - mapping. This filter enables you to specify mappings that replace one string with another. For example, you could specify a mapping that replaces TX with Texas.
+       - pattern_replace. This filter enables you to specify a regular expression that identifies patterns in the input text and how matching text should be replaced.
+     - Tokenizers. These components divide the text into tokens to be added to the index. Tokenizers also break down words into their root forms. Often, a token is a single word, but you might want to create unusual tokens such as: A full postal address. A complete URL or email address. there are 13 different tokenizers to choose from. These tokenizers include:
+       - classic. This tokenizer processes text based on grammar for European languages.
+       - keyword. This tokenizer emits the entire input as a single token. Use this tokenizer for fields that should always be indexed as one value.
+       - lowercase. This tokenizer divides text at non-letters and then modifies the resulting tokens to all lower case.
+       - microsoft_language_tokenizer. This tokenizer divides text based on the grammar of the language you specify.
+       - pattern. This tokenizer divides texts where it matches a regular expression that you specify.
+       - whitespace. This tokenizer divides text wherever there's white space.
+     - Token filters. These filters remove or modify the tokens emitted by the tokenizer. There are forty one different token filters available, including:
+       - Language-specific filters, such as arabic_normalization. These filters apply language-specific grammar rules to ensure that forms of words are removed and replaced with roots.
+       - apostrophe. This filter removes any apostrophe from a token and any characters after the apostrophe.
+       - classic. This filter removes English possessives and dots from acronyms.
+       - keep. This filter removes any token that doesn't include one or more words from a list you specify.
+       - length. This filter removes any token that is longer than your specified minimum or shorter than your specified maximum.
+       - trim. This filter removes any leading and trailing white space from tokens.
+   - Create a custom analyzer: You create a custom analyzer by specifying it when you define the index. You must do this with JSON code - there's no way to specify a custom index in the Azure portal. Use the analyzers section of the index at design time. You can include **only one** tokenizer but one or more character filters and one or more token filters.
+   - Test a custom analyzer: Once you've defined your custom analyzer as part of your index, you can use the REST API's `Analyze Text` function to submit test text and ensure that the analyzer returns tokens correctly.
+   - Use a custom analyzer for a field: Once you've defined and tested a custom analyzer, you can configure your index to use it. You can specify an analyzer for each field in your index. You can use the analyzer field when you want to use the same analyzer for both indexing and searching. It's also possible to use a different analyzer when indexing the field and when searching the field.
+ - Enhance an index to include multiple languages: Support for multiple languages can be added to a search index. You can add language support manually by providing all the translated text fields in all the different languages you want to support. You could also choose to use Azure AI Services to provide translated text through an enrichment pipeline. Here, you'll see how to add fields with different languages to an index. You'll then constrain results to fields with specific languages. Finally, create a scoring profile to boost the native language of your end users.
+   - Add language specific fields: To add multiple languages to an index, first, identify all the fields that need a translation. Then duplicate those fields for each language you want to support.
+   - Limit the fields for a language: In this module, you've already seen how to limit the fields returned in a search request. You can also select which fields are being searched. Your language specific search solution can combine these two features to focus on fields with specific languages in them. Using the `searchFields` and `select` properties 
+   - Enrich an index with multiple languages using Azure AI Services: If you don't have access to translations, you can enrich your index and add translated fields using Azure AI Services. For example, let's add Japanese and Ukrainian translations to an example retail properties index:
+     - Add the new fields: You add two new fields to the index with these properties, the first to store the Japanese translation and the seconded the Ukrainian
+     - Add the translation skillsets: You add two skills into the skillset definition to translate the document/description fields into the two languages.
+     - Map the translated output into the index: The last step is to update the indexer to map the translated text into the index.
+ - Improve search experience by ordering results by distance from a given reference point: Often, users want to search for items associated with a geographical location.
+   - What are geo-spatial functions? To ask Cognitive Search to return results based on their location information, you can use two functions in your query:
+     - `geo.distance`. This function returns the distance in a straight line across the Earth's surface from the point you specify to the location of the search result.
+     - `geo.intersects`. This function returns `true` if the location of a search result is inside a polygon that you specify.
+     - To use these functions, make sure that your index includes the location for results. Location fields should have the datatype `Edm.GeographyPoint` and store the `latitude` and `longitude`.
+   - Use the geo.distance function: use filter declarative or order keyword `$filter=geo.distance(location, geography'POINT(-122.131577 47.678581)') le 5` or `orderby=geo.distance(Location, geography'POINT(2.294481 48.858370)') asc` : `Location`, `geography'POINT(2.294481 48.858370)'`, `le 5`, `asc`
+   - Use the geo.intersects function: The geo.intersects function compares a location with a polygon on the Earth's surface, which you specify with three or more points. By using a polygon, you can create a shape that closely matches an area, such as an arrondissement. Use this polygon to add a geographical filter to your query: `geo.intersects(Location, geography'POLYGON((2.32 48.91, 2.27 48.91, 2.27 48.60, 2.32 48.60, 2.32 48.91))')`
+     - geo.intersects returns a boolean value, so it's not possible to use it in an orderby clause.
+     - In polygons, you must specify the points in counterclockwise order and the polygon must be closed, which means that the first and last points specified must be the same.
 ## Build an Azure Machine Learning custom skill for Azure Cognitive Search
 ## Search data outside the Azure platform in Azure Cognitive Search using Azure Data Factory
 ## Maintain an Azure Cognitive Search solution
