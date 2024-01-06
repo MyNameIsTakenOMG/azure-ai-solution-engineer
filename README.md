@@ -621,6 +621,19 @@
      - geo.intersects returns a boolean value, so it's not possible to use it in an orderby clause.
      - In polygons, you must specify the points in counterclockwise order and the polygon must be closed, which means that the first and last points specified must be the same.
 ## Build an Azure Machine Learning custom skill for Azure Cognitive Search
+ - Understand how to use a custom Azure Machine Learning skillset: Using a machine learning custom skill works the same as adding any other custom skill to a search index.
+Here, you'll see how using the AmlSkill custom skill is different and explore the considerations of how to effectively use it.
+   - Custom Azure Machine Learning skill schema: The best way to manage the efficiency of an AML skill is to scale up the Kubernetes inference cluster appropriately to manage your workload.
+ - Enrich a search index using an Azure Machine Learning model: You create your Azure Machine Learning model using developer tools like the Python SDK, REST APIs, or Azure CLI. Another option is to take advantage of the Azure AI Machine Learning studio, a graphical user interface that lets you create, train, and deploy models without writing any code. General steps: Create Machine learning worksplace. --> Train model --> Edit scoring code --> Create endpoint --> Update cognitive search
+   - Create an AML workspace: When you create the AML workspace, Azure will also create storage accounts, a key store, and application insights resources. The AML workspace Overview pane gives you a link to launch the Azure AI Machine Learning Studio.
+   - Create and train a model in Azure Machine Learning studio: Azure AI Machine Learning Studio lets you use a designer to use drag and drop to create pipelines that create and train models. There's an even easier way to create models by using prebuilt templates.
+   - Alter how the model works to allow it to be called by the AML custom skill: The models you train will normally use many examples of the data. The datasets will have many rows and be split and used to train and test the model. The code that handles this data and passes it to the model needs to be changed to handle single rows.
+   - Create an endpoint for your model to use: The model is deployed to an endpoint. Azure AI Machine Learning Studio supports deploying a model to a real-time endpoint, a batch endpoint, or a web service. At the moment, **the custom `AmlSkill` skill in Azure Cognitive Search only supports web service endpoints**. The other restriction is that the endpoint has to be an Azure Kubernetes Service (AKS), container instances aren't supported. If you have experience in creating and managing AKS clusters, you can manually create the clusters in the Azure portal and reference them when you create your endpoint. However, an easier option is to let Azure AI Machine Learning Studio create and manage the cluster for you.
+   - Connect the AML custom skill to the endpoint:
+     - With everything above in place, you need to update your Azure Cognitive Search service. First, to enrich your search index you'll add a new field to your index to include the output for the model.
+     - Then you'll update your index skillset and add the #Microsoft.Skills.Custom.AmlSkill custom skill.
+     - Next, you'll change your indexer to map the output from the custom skill to the field you created on the index.
+     - The last step is to rerun your indexer to enrich your index with the AML model.
 ## Search data outside the Azure platform in Azure Cognitive Search using Azure Data Factory
 ## Maintain an Azure Cognitive Search solution
 ## Get started with Azure OpenAI Service
