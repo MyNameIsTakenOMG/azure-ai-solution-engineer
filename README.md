@@ -635,6 +635,31 @@ Here, you'll see how using the AmlSkill custom skill is different and explore th
      - Next, you'll change your indexer to map the output from the custom skill to the field you created on the index.
      - The last step is to rerun your indexer to enrich your index with the AML model.
 ## Search data outside the Azure platform in Azure Cognitive Search using Azure Data Factory
+ - Index data from external data sources using Azure Data Factory:
+   - Push data into a search index using Azure Data Factory (ADF): a zero-code option for pushing data into an index using ADF. ADF comes with connections to nearly 100 different data stores. With connectors like HTTP and REST that allow you to connect an unlimited number of data stores. These data stores are used as a source or a target (called sinks in the copy activity) in pipelines. The Azure Cognitive Search index connector can be used as a sink in a copy activity.
+     - Create an ADF pipeline to push data into a search index
+       - Create an Azure Cognitive Search index with all the fields you want to store data in.
+       - Create a pipeline with a copy data step.
+       - Create a data source connection to where your data resides.
+       - Create a sink to connect to your search index.
+       - Map the fields from your source data to your search index.
+       - Run the pipeline to push the data into the index.
+       - Limitations of using the built-in Azure Cognitive Search as a linked service: String, Int32, Int64, Double, Boolean, DataTimeOffset. This means ComplexTypes and arrays aren't currently supported. Looking at the JSON document above this means that it isn't possible to map all the phone numbers for the customer. Only the first telephone number has been mapped.
+ - Index any data using the Azure Cognitive Search push API: The REST API is the most flexible way to push data into an Azure Cognitive Search index. You can use any programming language or interactively with any app that can post JSON requests to an endpoint.
+   - Supported REST API operations: There are two supported REST APIs provided by cognitive search. Search and management APIs. This module focuses on the search REST APIs that provide operations on five features of search: **Index, Document, Indexer, Skillset, Synonym map**
+   - How to call the search REST API: must use 'HTTPS' and must include **api-version** and **api-key**
+     - Add data to an index: The body of your request needs to let the REST endpoint know the **action(upload, merge, mergeOrUpload, delete)** to take on the document, which document to apply the action too, and what data to use. You can add as many documents in the value array as you want. However, for optimal performance consider batching the documents in your requests up to a maximum of 1,000 documents, or 16 MB in total size.
+   - Use .NET Core to index any data
+     - How your index performs is based on six key factors:
+       - The search service tier and how many replicas and partitions you've enabled.
+       - The complexity of the index schema. Reduce how many properties (searchable, facetable, sortable) each field has.
+       - The number of documents in each batch, the best size will depend on the index schema and the size of documents.
+       - How multithreaded your approach is.
+       - Handling errors and throttling. Use an exponential backoff retry strategy.
+       - Where your data resides, try to index your data as close to your search index. For example, run uploads from inside the Azure environment.
+     - Work out your optimal batch size
+     - Implement an exponential backoff retry strategy
+     - Use threading to improve performance
 ## Maintain an Azure Cognitive Search solution
 ## Get started with Azure OpenAI Service
 ## Build natural language solutions with Azure OpenAI Service
