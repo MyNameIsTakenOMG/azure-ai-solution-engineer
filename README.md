@@ -27,6 +27,9 @@
  - [Build an Azure Machine Learning custom skill for Azure Cognitive Search](#build-an-azure-machine-learning-custom-skill-for-azure-cognitive-search)
  - [Search data outside the Azure platform in Azure Cognitive Search using Azure Data Factory](#search-data-outside-the-azure-platform-in-azure-cognitive-search-using-azure-data-factory)
  - [Maintain an Azure Cognitive Search solution](#maintain-an-azure-cognitive-search-solution)
+ - [Get started with Azure OpenAI Service](#get-started-with-azure-openai-service)
+ - [Build natural language solutions with Azure OpenAI Service](#build-natural-language-solutions-with-azure-openai-service)
+ - [Apply prompt engineering with Azure OpenAI Service](#apply-prompt-engineering-with-azure-openai-service)
 
 
 ## Prepare to develop AI solutions on Azure
@@ -759,6 +762,5 @@ Here, you'll see how using the AmlSkill custom skill is different and explore th
    - Few shot learning: Using a user defined example conversation is what is called `few shot learning`, which provides the model examples of how it should respond to a given query. These examples serve to train the model how to respond. In practical terms, conversation history and few shot learning are sent to the model in the same way; each user message and assistant response is a discrete message in the message object. The ChatCompletion endpoint is optimized to include message history, regardless of if this message history is provided as few shot learning, or actual conversation history. While not ideal, similar results can be achieved with the Completion endpoint by including the conversation exchange within the single prompt, much like we saw with system messages. If you do need to include multiple messages in a single prompt with Completion, you can make it clear to the model by putting each message on a new line and labeling each line with the role. Formatting this prompt would be similar to how the conversation was presented at the top of this section.
    - Break down a complex task: Another technique for improved interaction is to divide complex prompts into multiple queries. This allows the model to better understand each individual part, and can improve the overall accuracy. Dividing your prompts also allows you to include the response from a previous prompt in a future prompt, and using that information in addition to the capabilities of the model to generate interesting responses.
      - Chain of thought: One useful method to help you break down your task effectively is to ask the model to explain its chain of thought. Asking a model to respond with the step by step process by which it determined the response is a helpful way to understand how the model is interpreting the prompt. By doing so, you can see where the model made an incorrect logical turn and better understand how to change your prompt to avoid the error. This technique can include asking it to cite its sources, like Bing chat does (which uses a GPT-4 generation model), and giving reasoning for why it determined its answer. The chain of thought prompting technique is best used to help you iterate and improve on your prompts to get the highest quality answer from the model.
-##
 
 
