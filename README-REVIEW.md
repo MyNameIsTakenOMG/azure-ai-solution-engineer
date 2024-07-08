@@ -83,6 +83,95 @@
    - Consume Azure AI services from a container: no need to provide subcription key, but has to implement your own authentication solution and network security restrictions.
 
 ## Create computer vision solutions with Azure AI Vision
+ - Analyze images
+   - Provision an Azure AI Vision resource
+     - Description and tag generation - determining an appropriate caption for an image, and identifying relevant "tags" that can be used as keywords to indicate its subject.
+     - Object detection - detecting the presence and location of specific objects within the image.
+     - People detection - detecting the presence, location, and features of people in the image.
+     - Image metadata, color, and type analysis - determining the format and size of an image, its dominant color palette, and whether it contains clip art.
+     - Category identification - identifying an appropriate categorization for the image, and if it contains any known landmarks.
+     - Background removal - detecting the background in an image and output the image with the background transparent or a greyscale alpha matte image.
+     - Moderation rating - determine if the image includes any adult or violent content.
+     - Optical character recognition - reading text in the image.
+     - Smart thumbnail generation - identifying the main region of interest in the image to create a smaller "thumbnail" version.
+   - Analyze an image:
+     - sdk: create an `imageAnalysisClient` with `endpoint` and `key`; use `analyze` method with property `visual_features` assigned with `[VirsualFeatures]` (`VisualFeature enum`: TAGS, OBJECTS, CAPTION, DENSE_CAPTIONS,PEOPLE, SMART_CROPS,READ)
+   - Generate a smart-cropped thumbnail and remove background:
+     - thumbnail: specify `dimensions` and `region of interest` of the image
+     - remove background: `alpha matte` of the foreground subject
+ - Image classification with custom Azure AI Vision models
+   - Create a custom Azure AI Vision classification model: (the types of custom models include `image classification`,`object detection`, and `product recognition`:more accuracy than `object detection`) first create an azure ai services resource or azure ai vision resource, then create a custom project.
+     - Components of a custom Vision project: a `dataset` is the collection of images which is stored in an azure blob storage container, and a `COCO` file is the file that defines the labal info about those images. And the steps to take to train models:
+       - create blob storage container and upload images
+       - create dataset and connect it to the blob storage container, also define the type of project
+       - label your data in azure ml data labeling project, which creates the COCO file in the blob storage container (each category need 3-5 images)
+       - connect COCO file to the dataset
+       - train custom model on dataset and labels
+       - verify performance and iterate it if need
+     - COCO files(json file):
+       - images
+       - annotations
+       - categories
+     - Creating your dataset
+   - Understand image classification: classify the images based on their contents. models can be trained for multi-class or multi-label.
+   - Understand object detection:
+     - the class label of each object detected in the image
+     - the location of each object within the image(bounding box)
+   - Train an image classifier in Vision Studio
+ - Detect, analyze, and recognize faces
+   - Identify options for face detection, analysis, and identification.
+     - Azure ai vision service: detect people and bounding box
+     - face service: more comprehensive solution: face detection, facial feature analysis, face comparison and verification, facial recognition
+   - Understand considerations for face analysis
+     - data privacy and security
+     - transparency
+     - faireness and inclusiveness
+   - Detect faces with the Computer Vision service: call `analyze iamge` function(sdk) or rest api requests, specifying `people` as `visual_feature`. Return the bounding box and basic attributes
+   - Understand capabilities of the Face service
+     - Face detection - for each detected face, the results include an ID that identifies the face and the bounding box coordinates indicating its location in the image.
+     - Face attribute analysis - you can return a wide range of facial attributes, including:
+       - Head pose (pitch, roll, and yaw orientation in 3D space)
+       - Glasses (NoGlasses, ReadingGlasses, Sunglasses, or Swimming Goggles)
+       - Blur (low, medium, or high)
+       - Exposure (underExposure, goodExposure, or overExposure)
+       - Noise (visual noise in the image)
+       - Occlusion (objects obscuring the face)
+       - Accessories (glasses, headwear, mask)
+       - QualityForRecognition (low, medium, or high)
+     - Facial landmark location - coordinates for key landmarks in relation to facial features (for example, eye corners, pupils, tip of nose, and so on)
+     - Face comparison - you can compare faces across multiple images for similarity (to find individuals with similar facial features) and verification (to determine that a face in one image is the same person as a face in another image)
+     - Facial recognition - you can train a model with a collection of faces belonging to specific individuals, and use the model to identify those people in new images.
+     - Facial liveness - liveness can be used to determine if the input video is a real stream or a fake to prevent bad intentioned individuals from spoofing the recognition system.
+   - Compare and match detected faces: when a face is detected, a unique id will be assigned to it and retained in the service resource for 24 hrs, and this id has no indication of this individual's identity other than their facial features, which can be used for facial comparison.
+   - Implement facial recognition: (this feature is related to personal information, thus needs to apply for use)
+     - create a `Person Group` that defines the sets of people you wanna identity
+     - add `Person` to the `Person Group` for each person
+     - add detected faces from multiple images to each `person`, the id for the person will persist (`persisted faces`)
+     - lastly, train the model
+     - the model can be used to identity individuals, verify identity of a detected face, analyze new images to find faces that are similar to a known one
+ - Read Text in images and documents with the Azure AI Vision Service
+   - options for reading texts:
+     - image analysis OCR: used for general unstructured documents with small amount of text, or images that contain text; synchronous api call; has functionalities for analyzing images past exrtacting text
+     - document intelligence: used for smail to large volumes of text from images and pdf documents; uses context and structure of the document to improve accuracy; asynchronous api call
+   - Read text from images using OCR: use `imageAnalysis` function with `read` `visual_feature`. the return json results: `blocks`, `lines`,`text`/`words`
+   - Use the Azure AI Vision service Image Analysis with SDKs and the REST API
+   - Develop an application that can read printed and handwritten text
+ - Analyze video
+   - Describe Azure Video Indexer capabilities
+     - Facial recognition - detecting the presence of individual people in the image. This requires Limited Access approval.
+     - Optical character recognition - reading text in the video.
+     - Speech transcription - creating a text transcript of spoken dialog in the video.
+     - Topics - identification of key topics discussed in the video.
+     - Sentiment - analysis of how positive or negative segments within the video are.
+     - Labels - label tags that identify key objects or themes throughout the video.
+     - Content moderation - detection of adult or violent themes in the video.
+     - Scene segmentation - a breakdown of the video into its constituent scenes.
+   - Extract custom insights: Azure Video Indexer includes predefined models that can recognize well-known celebrities, do OCR, and transcribe spoken phrases into text. You can extend the recognition capabilities of Video Analyzer by creating custom models for:
+     - `people`: add images of the faces appear in the videos, and train the model to make video indexer recognize them
+     - `language`: train a custom model to detect and transcribe specific terminology
+     - `brands`; train a custom model to recognize names of brands, products,etc
+   - Use Azure Video Indexer widgets and APIs: `Azure Video Indexer widgets` can be embedded into custom html interfaces, sharing insights from specific videos with others wihout giving people full access to your account in the azure video indexer portal. Or using `azure video indexer api` to create projects, retrive insights or modify models.
+     - using `Azure resource manager` template to create azure ai video indexer resource 
 
 ## Develop natural language processing solutions with Azure AI Services
 
