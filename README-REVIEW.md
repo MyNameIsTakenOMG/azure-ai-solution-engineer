@@ -175,14 +175,97 @@
 
 ## Develop natural language processing solutions with Azure AI Services
  - Analyze text with Azure AI Language
-   - Detect language from text
-   - Analyze text sentiment
+   - Detect language from text:
+     - confidence score: 0 - 1
+     - document size < 5120 characters
+     - each collection limit: 1000, each item has a unique `id` and `text` (can also pass `countryHint` to improve prediction performance)
+     - mixed language content returns the largest representation with a lower positive rateing
+     - for the content where there is ambguity, response will be `unknown` with confidence score `0`
+   - Analyze text sentiment: evaluate how positive and nagative the content is.
+     - response contains overall sentiment and each sentence sentiment
+     - sentence sentiment: `positive`, `negative`,`neutral`
+     - all `neutral` sentences --> `neutral` document
+     - only `positve` and `neutral` sentences --> `positive` document
+     - only `negative` and `neutral` sentences --> `negative` document
+     - `positive` and `negative` sentences --> `mixed` document
    - Extract key phrases, entities, and linked entities
+     - extract key phrases: works best with larger documents(max: 5120 characters), can also pass multiple documents
+     - entities: `person`, `location`,`datetime`,`organization`,`address`,`email`,`url`
+     - linked entities: to disambiguate entities of the same name by referencing an article in a knowledge base.
  - Create question answering solutions with Azure AI Language
+   - Understand question answering and how it compares to language understanding.
+     - understand question answering: define a `knowledge base` of question and answer pairs that can be queried using natural language input. it can be published and  consumed by client apps, or bots. `knowledge base` is created from existing sources: web sites with `FAQ` documentation; files with structured text, like brochures or user guides; built-in chit char question and answer pairs having conversational exchanges.
+     - question answering vs language undestanding
+   - Create, test, publish, and consume a knowledge base.
+     - create: `ai language` service, enable `question answering` feature; create `ai search` resource to host the index of the knowledge base; go to `language studio` to create `custom question answering` project; then add data sources to knowledge base; lastly edit question and answer pairs
+     - test:
+     - publish:
+     - consume: through REST Api (`question`,`top`,`scoreThreshold`,`strictFilters`)
+   - Implement multi-turn conversation and active learning:
+     - multi-turn: ask clients follow-up questions to elicit more information from clients before presenting a definitive answer.
+     - active learning: improve knowledge base by `active learning`(different questions with the same meanning, enabled by default) and defining `synonyms`(words with the same meaning)
+   - Create a question answering bot to interact with using natural language.
  - Build a conversational language understanding model
+   - Azure ai language service: pre-configured features and learned features
+     - pre-configured features: `Summarization`,`Named entity recognition`,`Personally identifiable information (PII) detection`,`Key phrase extraction`,`Sentiment analysis`,`Language detection`.
+     - learned features: `Conversational language understanding (CLU)`,`Custom named entity recognition`,`Custom text classification`,`Question answering`
+   - Provision Azure resources for Azure AI Language resource
+   - Define intents, utterances, and entities
+     - utterances: phrases that a user might enter when interacting with an app that uses your language model.
+     - intent: a task or action that a user wanna perform( the meaning of the utterance). Note: every model has a `None` intent that should be explicitly identify utterances with no action required or that falls outside of the scope of the domain of this model.
+     - entities: used to add specific context to intents
+       - learned entities
+       - list entities
+       - prebuilt entities
+   - Use patterns to differentiate similar utterances: similar but with different meanings of utterances.
+   - Use pre-built entity components
+   - Train, test, publish, and review an Azure AI Language model
+     - Train a model to learn intents and entities from sample utterances.
+     - Test the model interactively or using a testing dataset with known labels
+     - Deploy a trained model to a public endpoint so client apps can use it
+     - Review predictions and iterate on utterances to train your model 
  - Create a custom text classification solution
+   - Understand types of classification projects
+     - single label classification
+     - multiple label classification
+     - labeling data
+     - evaluating and improving your model: false positive, false negative
+       - `recall`: Of all the actual labels, how many were identified; the ratio of true positives to all that was labeled.
+       - `precision`: How many of the predicted labels are correct; the ratio of true positives to all identified positives.
+       - `f1 scrore`: A function of recall and precision, intended to provide a single score to maximize for a balance of each component
+   - Build a custom text classification project
+     - define labels
+     - tag data
+     - train model
+       - training set(80% recommended) and testing set
+       - automatic split( great for large dataset) and manual spliy(best for smaller datasets)
+     - view model
+     - improve model(iterate)
+     - deploy model
+     - consume model
+   - Tag data, train, and deploy a model
+   - Submit classification tasks from your own app
  - Custom named entity recognition
+   - Understand tagging entities in extraction projects
+     - considerations for data selection and refining entities: high quality data(diversity, distribution, accuracy)
+     - project limits:
+       - training: > 10 files and < 100,000 files
+       - 10 deployments per project
+       - apis:
+         - authoring: this api creates a project, trains and deploys your model. limited to 10 post and 100 get per min
+         - analyze: this api extracts entities; requires a task and retrieves the results. limited to 20 get or post.
+       - projects: 1 storage account per project; 500 projects per resource; 50 trained model per project
+       - entities: 500 characters per entity, up to 200 entity types
+     - label your data: (`consistency`,`percision`,`completeness`)
+   - Understand how to build entity recognition projects
  - Translate text with Azure AI Translator service
+   - Provision a Translator resource
+   - Understand language detection, translation, and transliteration
+   - Specify translation options
+     - word alignment
+     - sentence length
+     - profanity filtering: `NoAction`,`Deleted`,`Marked`
+   - Define custom translations
  - Create speech-enabled apps with Azure AI services
  - Translate speech with the Azure AI Speech service
 
