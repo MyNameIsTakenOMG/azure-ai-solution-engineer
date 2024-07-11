@@ -267,7 +267,45 @@
      - profanity filtering: `NoAction`,`Deleted`,`Marked`
    - Define custom translations
  - Create speech-enabled apps with Azure AI services
+   - Provision an Azure resource for the Azure AI Speech service
+   - Use the Azure AI Speech to text API to implement speech recognition
+     - speech to text api & speech to text short audio api
+     - `using the azure ai speech sdk`:
+       - `speechConfig`: localtion and key to connect to azure ai speech resource
+       - `audioConfig`: define the input source for the audio to be transcribed.
+       - `speechConfig` & `audioConfig`--> `speechRecognizer` (proxy client) for `speech to text api`
+       - call `recognizeOnceAsync` to asynchronously transcribe a single spoken utterance.
+       - the result `speechRecognitionResult`: `duration`,`offsetInticks`,`properties`,`reason`(nomatch,cancelled,recognizedspeech),`resultid`,`text`
+   - Use the Text to speech API to implement speech synthesis
+     - text to speech api & batch synthesis api
+     - `using the azure ai speeck sdk`:
+       - `speechConfig`: localtion and key to connect to azure ai speech resource
+       - `audioConfig`: define the output device for the speech to be synthesized.
+       - `speechConfig` & `audioConfig`--> `speechSynthesizer` (proxy client) for `text to speech api`
+       - call `speakTextAsync` to asynchronously convert text to a single spoken audio.
+       - the result `speechSynthesisResult`: `audioData`,`properties`,`reason`(cancelled,synthesizingAudioCompleted),`resultid`
+   - Configure audio format and voices:
+     - audio format(setspeechSynthesisOutputFormat): `audio file type`,`smaple-rate`,`bit-depth`
+     - voices(speechSynthesisVoiceName): `standard voices`,`neural voices`
+   - Use Speech Synthesis Markup Language (SSML): xml-based syntax for describing characteristics of the speech you wanna generate:
+     - specify a speaking style
+     - insert pauses or silence
+     - specify phonemes
+     - adjest the prosody of the voice
+     - use common 'say-as' rules
+     - insert recorded speech or audio (simulate background noise)
  - Translate speech with the Azure AI Speech service
+   - Provision Azure resources for speech translation.
+   - Generate text translation from speech.
+     - `speechTranslationConfig`: location and key
+     - `SpeechTranslationConfig`: input language and the target language
+     - `AudioConfig`: define the input source for the audio
+     - `SpeechTranslationConfig` & `AudioConfig` --> `TranslationRecognizer` proxy client
+     - use `RecognizeOnceAsync` to asynchronously translate a single spoken utterance
+     - result `SpeechRecognitionResult`: `duration`,`offsetInticks`,`properties`,`reason`,`resultid`,`text`,`translations`
+   - Synthesize spoken translations
+     - event-based synthesis: `TranslationRecognizer` has a `synthesizing` event, then create an event handler and use`getAudio` method of the `result` parameter to retrieve the byte stream of translated audio.
+     - manual synthesis: iterate the `translations` dictionary and use `speechSynthesizer` to synthesize an audio stream for each language
 
 ## Implement knowledge mining with Azure AI Search
 
