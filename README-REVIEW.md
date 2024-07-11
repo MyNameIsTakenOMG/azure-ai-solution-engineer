@@ -308,6 +308,121 @@
      - manual synthesis: iterate the `translations` dictionary and use `speechSynthesizer` to synthesize an audio stream for each language
 
 ## Implement knowledge mining with Azure AI Search
+ - Create an Azure AI Search solution
+   - Create an Azure AI Search solution
+     - manage capacity: `free`,`basic`,`standard`(s,s2,s3),`storage optimized`(l1,l2)
+     - replicas and partitions: `replica`: instance of the search service, `partition`: used to divide an index into multiple storage locations. Together, it is called `search units`(replicas * partitions)
+     - understand search components:
+       - data source: unstructured files in azure blob storage containers; azure sql db tables; documents in cosmosDB; or directly push JSON data into `index`
+       - skillset: an enrichment pipeline used by `indexer` where each step enhances the data with insights obtained by a specific ai skill. such as `the language`, `key phrases`,`sentiment score`,`entities`,`image analysis`, or some custom skills
+       - indexer: an engine that drives overall indexing process. it takes the outputs from skills of the skillset, along with the original data from the data source, and maps them to the fields in the index.
+       - index: a searchable result of the indexing process. It consists of a collection of JSON documents with fields that contains the values extracted from indexing. the attributes:
+         - `key`: a unique key for the field
+         - `searchable`: full-text search support: search a text in a text data
+         - `filterable`: can be used in filter expressions
+         - `sortable`: support sorting
+         - `facetable`: fields that can be used for `facets`
+         - `retrievable`: by default, all fields are retrievable
+     - understand indexing process: start by creating a `document`(a JSON file), you can extract image data and put them into `normalized_images` property. also each skill will add fields into this `document`. or create `merged_content` field using a skill which would use other fields as inputs
+   - Develop a search application
+     - search an index
+       - full text search: `simple`, `full`
+       - search parameters: `search`,`queryType`,`searchFields`,`select`,`searchMode`
+       - query processing:
+         - query parsing
+         - lexical analysis
+         - document retrieval
+         - scoring
+     - apply filtering and sorting
+       - filtering results, filtering with facets, sorting results
+     - enhance the index
+       - search-as-you-type: add `suggester` to the index: `suggestion` or `autocomplete`
+       - custom scoring and result boosting: define `scoring profile`, can be used on single search or on index definition
+       - synonyms: define `synonym maps` to link related items
+ - Create a custom skill for Azure AI Search
+   - Implement a custom skill for Azure AI Search: input and output schemas that should be followed when creating custom skill
+   - Integrate a custom skill into an Azure AI Search skillset: using `custom.webApiSkill` skill type
+ - Create a knowledge store with Azure AI Search
+   - knowledge store: `export index as JSON files`,`normalize the index into relational schema of tables`, `images extracted from the indexing process`
+   - projection: each skill will iteratively build the `document`, and you can persist some or all of the fields as `projections`. Also using `shaper` skill to create new fields with simpler structure for the fields you wanna map to projections
+   - Create a knowledge store from an Azure AI Search pipeline
+   - View data in projections in a knowledge store
+ - Enrich your data with Azure AI Language
+   - Use Azure AI Language to enrich Azure AI Search indexes.
+     - azure ai language features: `classify text`,`understand questions and conversational language`,`extract information`,`summerize text`,`translate text`
+   - Enrich an AI Search index with custom classes
+     - store search data for ai language studio and ai search indexers
+     - create language studio project
+     - train and test your model
+     - create search index on stored documents
+     - create a function to use the trained model
+     - update search solution, index,indexer and custom skiller
+ - Implement advanced search features in Azure AI Search
+   - Improve the ranking of a document with term boosting: can enable full-text search by adding`&queryType=full`, and unlock a couple of features: `fuzzy search`, `term proximity search`, `term boosting`,`regular expression search`, etc
+   - Improve the relevance of results by adding scoring profiles: `weights` or `function`
+   - Improve an index with analyzers and tokenized terms
+     - analyzer: lucene analyzer(default), or other language analyzers or specialized analyzers
+     - custom analyzers:
+       - character filters: `html strp`,`mapping`,`pattern_replace`
+       - tokenizers: break words down into tokens and root forms
+       - token filters: further process tokens
+       - can use `analyzer` field on indexing or searching
+   - Enhance an index to include multiple languages:
+     - add fields that need a translation
+     - add translation skill to the skillset
+     - update indexer to map the translated text to the correct fields in the index
+   - Improve search experience by ordering results by distance from a given reference point
+     - geo-spatial fucntions: `geo.distance`,`geo.intersects`
+ - Build an Azure Machine Learning custom skill for Azure AI Search
+   - Understand how to use a custom Azure Machine Learning skillset
+     - `AmlSkill` custom skill type
+   - Use Azure Machine Learning to enrich Azure AI Search indexes.
+ - Search data outside the Azure platform in Azure AI Search using Azure Data Factory
+   - Use Azure Data Factory to copy data into an Azure AI Search Index
+     - create an ADF pipeline to push data into a search index
+     - limits: only support certain data types
+   - Use the Azure AI Search push API to add to an index from any external data source
+     - exponential backoff strategy with batching operation
+     - outsider function using multi-threading
+ - Maintain an Azure AI Search solution
+   - manage security of ai search solution
+     - data encryption: encrypted at rest and in-transit
+     - secure inbound traffic: azure gateway, and firewall for public endpoint
+     - secure outbound traffic: indexer to data sources (key-based authentication, database login, or microsoft entra login), and using firewall to restrict access to azure services.
+     - secure data at the document level: add a new security field(filterable) to every document that contains the user or group IDs that can access it. then when querying, add `search.in` to filter to certain group of users
+   - optimize performance of ai search solution
+     - manage the current search performance
+     - check if your search service is throttled
+     - check the performance of individual queries
+     - optimize your index size and schema
+     - improve the performance of your queries
+     - use the best service tier for your search needs
+   - manage costs of ai search solution
+     - Estimate your search solutions baseline costs
+     - Understand the billing model
+     - Tips to reduce the cost of your search solution
+       - as few region as possible, all resources should be in the same region
+       - for predictable patterns of indexing new data, considering scaling up inside your search tier, then scale back down for your regular querying
+       - to keep search requests and responses in the azure datacenter boundary, use azure web app front-end as your search app
+       - enable enrichment caching if using ai enrichment on blob storage
+     - using budgets and alerts
+   - improve reliability of ai search solution
+     - Make your search solution highly available
+     - Distribute your search solution globally
+     - Back up options for your search indexes: there is official solution to backup and restore mechanism for azure ai search. you have to backup yourself
+   - monitor ai search solution
+     - Monitor Azure AI Search in Azure Monitor: access `log analytics`(`azureActivity`,`azureDiagnostics`,`azureMetrics`)
+     - Use metrics to see diagnostic data visually
+     - Write Kusto queries against your search solutions logs
+     - Create alerts to be notified about common search solution issues: `search latency`,`throttle search percentage`,`delete search service`,`stop search service`
+   - debug search issues using azure portal
+     - Explore how to use the Debug Session tool in Azure AI Search
+     - Debug a skillset with Debug Sessions
+       - create a debug session
+       - explore and edit a skill
+       - validate the field mappings
+ - Perform search re-ranking with semantic ranking in Azure AI Search
+ - Perform vector search and retrieval in Azure AI Search
 
 ## Develop solutions with Azure AI Document Intelligence
 
