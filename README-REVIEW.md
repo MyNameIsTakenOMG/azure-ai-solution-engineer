@@ -451,5 +451,47 @@
    - Run vector search queries using the REST API
 
 ## Develop solutions with Azure AI Document Intelligence
+ - Plan an Azure AI Document Intelligence solution
+   - Describe the components of an Azure AI Document Intelligence solution.
+     - prebuilt models for general document analysis and other common forms or documents
+     - azure ai document intelligence is a high-level ai service built on lower level ai services, including ai vision.
+     - document intelligence is more sophisticated solution for document analysis
+     - azure ai document intelligence tool
+   - Create and connect to Azure AI Document Intelligence resources in Azure.
+   - Choose whether to use a prebuilt, custom, or composed model.
+     - prebuilt models: general document analysis models(read, general document, layout)
+     - specific document type models: `invoice`,`receipt`,`w-2`,`id document`,`business card`, `health insurance card`
+     - custom models: `custom template models`,`custom neural models`
+     - composed models: consists of multiple custom models
+ - Use prebuilt Document intelligence models
+   - Identify business problems that you can solve by using prebuilt models in Forms Analyzer.
+     - features: `text extraction`,`key-value pairs`,`entities`,`selection marks`,`tables`,`fields`
+     - input requirements:
+       - type: jpeg, png, bmp, tiff, pdf, or microsoft office files
+       - < 500mb standard tier, < 4mb for free tier
+       - dimentions between 50*50 -- 10,000 * 10,000
+       - pdf dimention < 17 * 17 inches or A3 paper size
+       - total size of the training data set < 500 pages
+       - pdf no password protected
+       - pdf and tiff: first 2000 pages for standard tier, first 2 pages for free tier
+   - Analyze forms by using the General Document, Read, and Layout models:
+     - for document with unpredictable structure, can use read, general document or layout
+   - Analyze forms by using financial, ID, and tax prebuilt models.
+ - Extract data from forms with Azure Document intelligence
+   - Identify how Document intelligence's layout service, prebuilt models, and custom models can automate processes.
+   - Use Document intelligence's capabilities with SDKs, REST API, and Document Intelligence Studio.
+   - Develop and test custom models.: (ocr.json, labels.json, fields.json)
+ - Create a composed Document intelligence model
+   - Describe business problems that you would use custom models and composed models to solve.
+     - **Custom neural models can't be composed with custom template models
+**
+   - Train a custom model to obtain data from forms with unusual structures.
+   - Create a composed model that can analyze forms in multiple formats.
+     - via document intelligence studio
+     - via code
+ - Build a Document intelligence custom skill for Azure AI search
+   - Describe how a custom skill can enrich content passed through an Azure AI Search pipeline.
+   - Build a custom skill that calls an Azure Forms Analyzer solution to obtain data from forms.
+
 
 ## Develop Generative AI solutions with Azure OpenAI Service
