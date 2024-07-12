@@ -495,3 +495,124 @@
 
 
 ## Develop Generative AI solutions with Azure OpenAI Service
+ - Get started with Azure OpenAI Service
+   - Create an Azure OpenAI Service resource and understand types of Azure OpenAI base models(gpt-4, gpt-3.5, embeddings models, dall-e models).
+   - Use the Azure OpenAI Studio, console, or REST API to deploy a base model and test it in the Studio's playgrounds.
+     - completion playground
+       - temperature: low --> high randomness
+       - max lenght(tokens)
+       - stop sequences: make responses stop at a desired point, such as the end of sentence or list
+       - top probabilities(top P): low --> high randomness (do not configure it along with temperature)
+       - frequency penalty: reduce the likelihood of repeating the same text in a response
+       - presence penalty: reduce the likelihood of any token that has appeared in the text at all so far, which increase the likelihood of introducing new topics in a response.
+       - pre-response text: can help prepare the model for a response
+       - post-response text: can encourage further user input
+     - chat playground: zero-shot or few-shot
+       - max response: api supports a maximum of 4000 tokens per prompt
+       - top P: the same as that of completion playground
+       - past messages included: number of past messages to include in each new api request to give the model context for new user queries
+   - Generate completions to prompts and begin to manage model parameters.
+     - prompts: a text portion of a request sent to the deployed model endpoint
+     - completions: a response comes back in form of text, code, or other formats
+     - prompts types:
+       - classifying content
+       - generating new content
+       - holding a conversation
+       - transformation(translation and symbol conversion)
+       - summarizing content
+       - picking up where you left off
+       - giving factual responses
+     - completion quality:
+       - the way a prompt is engineered
+       - model parameters
+       - data the model is trained on
+ - Build natural language solutions with Azure OpenAI Service
+   - Integrate Azure OpenAI into your application
+     - create an azure openai resource
+     - choose a model to deploy
+     - authentication and specification of deployed model
+     - prompt engineering
+   - Differentiate between different endpoints available to your application
+     - completion
+     - chatCompletion
+     - embeddings
+   - Generate completions to prompts using the REST API and language specific SDKs
+ - Apply prompt engineering with Azure OpenAI Service
+   - Understand the concept of prompt engineering and its role in optimizing Azure OpenAI models' performance.
+     - prompt engineering: the process of designing and optimizing prompts to better utilize AI models. (can also design prompts to understand how models reach the response or how models make decisions)
+     - parameters: `top P`, `temperature` (do not configure both at the same time)
+   - Know how to design and optimize prompts to better utilize AI models.
+     - provide clear instructions: recency bias can affects models. placing instructions(or most recent messages) at the end of the prompt will make models generate better responses
+     - use section markers: `---` or `###` to contain content to help models differenciate between instructions and contents
+     - primary, supporting, and grounding content: `primary content`: the subject of the query. `supporting content`: the content that may alter the response, not focus on the subject of the prompt. `grounding content`: allows the model to provide more reliable answers by providing content for the model to draw answer from. 
+     - cues: used with instructions, particularly useful when generating code
+   - Include clear instructions, request output composition, and use contextual content to improve the quality of the model's responses.
+     - request output composition
+     - system message: at the beginning of the propmts
+     - conversation history (chatgpt includes history automatically)
+     - few shot learning
+     - break down a complex task
+     - chain of thought--> a method to help break down your task effectively is to ask the model to explain its chain of thought.
+ - Generate code with Azure OpenAI Service
+   - Use natural language prompts to write code
+     - write functions
+     - change coding language
+     - understand unknown code
+   - Build unit tests and understand complex code with AI models
+     - complete partial code
+     - write unit tests
+     - add comments and generate documentation
+   - Generate comments and documentation for existing code
+   - fix bugs and improve your code
+   - refactor inefficient code
+ - Generate images with Azure OpenAI Service
+   - Describe the capabilities of DALL-E in the Azure openAI service: a neural network based model that can generate graphical data from natural language input.
+   - Use the DALL-E playground in Azure OpenAI Studio: settings: `resolution`,`image style`,`image quality`
+   - Use the Azure OpenAI REST interface to integrate DALL-E image generation into your apps: (`prompt`,`n`,`size`) for initial request, then the response has a `operation-location` header with a url to call to poll the generated images
+ - Implement Retrieval Augmented Generation (RAG) with Azure OpenAI Service
+   - understand RAG with azure openai service: models can reference both the specific data provided and its pretrained knowledge to provide more effective responses.
+     - receive the prompt
+     - analyze the prompt (relevant content and intent)
+     - query the search index with the content and intent
+     - insert search result into azure openai prompt, along with system message and user prompt
+     - send the entire prompt to azure openai
+     - return the response
+     - `by default, openai encourage model to use your data, but it can be unseleted, and when unselected it, model will only use its pre-trained knowledge`
+     - `fine-tuning vs RAG`: `fine-tuning`: train an existing model with additional data, which is more costly and time-consuming. `RAG`: remove the requirement of training a custom model and simplify the interaction with the model, the ai search service will find useful information and add it to the prompt as grounding data, and then azure openai will generate responses based on that information.
+   - add your own data and chat with your model using your own data
+     - limits: system message < 200 tokens; response < 1500 tokens
+ - Fundamentals of Responsible Generative AI
+   - Describe an overall process for responsible generative AI solution development
+     - Identify potential harms that are relevant to your planned solution.
+     - Measure the presence of these harms in the outputs generated by your solution.
+     - Mitigate the harms at multiple layers in your solution to minimize their presence and impact, and ensure transparent communication about potential risks to users.
+     - Operate the solution responsibly by defining and following a deployment and operational readiness plan.
+   - Identify and prioritize potential harms relevant to a generative AI solution
+     - identify potential harms
+     - prioritize identified harms
+     - test and verify the prioritized harms
+     - document and share the verified harms
+   - Measure the presence of harms in a generative AI solution
+     - Prepare a diverse selection of input prompts that are likely to result in each potential harm that you have documented for the system.
+     - Submit the prompts to the system and retrieve the generated output.
+     - Apply pre-defined criteria to evaluate the output and categorize it according to the level of potential harm it contains.
+     - manual and automatic testing: complement to each other
+   - Mitigate harms in a generative AI solution
+     - model layer: select a proper model or fine-tune a base model
+     - safety system layer: azure openai service includes `content filter`, and azure network monitoring and alerts and firewall 
+     - metaprompt and grounding layer: focus on construction of prompts that are submitted to the model. `metaprompts or system inputs to define the behaviors of the model`,`add grounding data to prompts`, `use RAG to retrieve contextual data from trusted data sources and include it in prompts`
+     - user experience layer: application level to restrict user inputs, validate inputs and outputs; documentation and other descriptions of ai solution should be transparent about capabilities and limitations as well as any potential harms of the system.
+   - Prepare to deploy and operate a generative AI solution responsibly
+     - complete prerelease reviews:
+       - legal
+       - privacy
+       - security
+       - accessibility
+     - release and operate the solution
+       - devise a phased delivery plan, to release to a small group of users, listen to the feedback before releasing to a wider audience
+       - create an incident response plan to estimate the reaction time to any unexpected incidents
+       - create a rollback plan in case something bad happened to the solution
+       - create a capability to immediately block harmful responses when discovered
+       - create a capability to block certain users, apps, or ip addresses when misuse
+       - create a way for users to provide feedback and report issues
+       - track telemetry data that allows you to determine user satisfaction and identify functional gaps or usability challenges (must follow privacy laws and policies)
