@@ -7,6 +7,7 @@
  - [Implement knowledge mining with Azure AI Search](#implement-knowledge-mining-with-azure-ai-search)
  - [Develop solutions with Azure AI Document Intelligence](#develop-solutions-with-azure-ai-document-intelligence)
  - [Develop Generative AI solutions with Azure OpenAI Service](#develop-generative-ai-solutions-with-azure-openai-service)
+ - [Assessments](#assessments)
 
 ## Get started with Azure AI Services
 
@@ -616,3 +617,67 @@
        - create a capability to block certain users, apps, or ip addresses when misuse
        - create a way for users to provide feedback and report issues
        - track telemetry data that allows you to determine user satisfaction and identify functional gaps or usability challenges (must follow privacy laws and policies)
+      
+
+## Assessments
+ - 1st test:
+   - A virtual machine in Azure belongs to a virtual network, if we wanna our app which is deployed to a virtual machine to access Azure ai services, then at the firewall level, we can grant access to the virtual network to the specific ai service endpoint.
+   - the prerequisites for diagnostic logging are `a log analytics workplace`, `a storage account`
+   - `mismatch` error: the api key is not for the correct endpoint of certain kina of azure ai services resource
+   - `invalid` error: api key is not for the correct regions.
+   - Model_2 Improves accuracy on small, side-view, and blurry faces. (`faceIdTimeToLive` is used for face id caching)
+   - for document intelligence, the S0 tier has limit of 500mb and 2000 pages. But, if documents are password-protected, then the process will fail.
+   - You need to upload the video, get the video index, and get the thumbnail for each keyframe. Three API calls need to be done to extract keyframes and store them in a disk.
+   - custom brands models supports brand detection from speech and visuals.
+   - Slate detection is used for clapper boards and digital patterns with color bars, and the custom Language model is used to add words that are not in the model.
+   - for ai video indexer, a sentence with special characters will be discarded
+   - When training the model, you should avoid repeating an identical sentence multiple times, as it may create bias against the rest of the input. You should avoid including uncommon symbols (~, # @ % &), as they will be discarded. The sentences in which they appear will also be discarded. You should also avoid putting inputs that are too large, such as hundreds of thousands of sentences, because doing so will dilute the effect of boosting.
+   - for azure language service, `opinionMining=true` will add aspect-based sentiment analysis, which in turn will make the sentiment more granular so that positive and negative in a single sentence can be returned.
+   - key phrase extraction is the feature of azure ai language, and while summarization is a feature that extracts sentences that collectively represent the most important or relevant information within the original content.
+   - speech service errors:
+     - `Substitution errors` are due to the model needing more training on custom product names and people names in speech-to-text feature of azure ai services.
+     - `deletion errors`: Overlapping speakers define.
+     - `insertion errors`: People talking in the background are detected.
+   - speaker recognition: determine who is speaking, verify and identify
+   - speaker verification: text-dependent or text-independent
+   - speaker identification: determine an unknown speaker
+   - Azure Storage is the only storage provider that can be used by default for batch transcription.
+   - The `List entity` is made up of a list of phrases that will guide the engine on how to match the text. When an entity has an ID of type List and is in Strict mode, the engine will only match if the text in the slot appears in the list.
+   - for training custom translator, when using bilingual training documents, `be liberal`, any in-domain human translation is better than machine translation (increase bilingual evaluation understudy: BLEU score)
+   - BLEU scores: 0 - 100, (40 -60 means a high-quality translation)
+   - If the language of the content in the source document is known, it is recommended to specify the source language in the request to get a better translation.
+   - ai translator features: `detect language`,`transliterate`,`dictionary lookup`,`dictionary example`
+   - Orchestration workflow projects do not support the multilingual option, so you need to create a separate workflow project for each language, which is an azure ai language service feature.
+   - Precision measures how precise/accurate a model is.
+   - Recall measures the model's ability to predict actual positive classes.
+   - F1 score is a function of precision and recall.
+   - Active learning is turned on by default. You can use active learning for this instead of manually logging the questions and adding them.
+   - Active learning suggestions are not in real time. There is an approximate delay of 30 minutes before suggestions show on this pane. This delay balances the high cost involved in real-time updates to the index and service performance.
+   - The throughput, the size, and the number of knowledge bases affect the pricing tier
+   - ai search projection types:
+     - tables: data that is best represented as rows and columns, or whenever you need granular representations of your data.
+     - files: when you need to save normalized, binary image files.
+     - objects: when you need the full JSON representation of your data and enrichments in one JSON document.
+   - ai search queryType:
+     - simple: query input as-is
+     - full: wildcard, fuzzy, regex, field-scoped queries...
+   - Document cracking is the process of opening files and extracting content. It is the first stage of the indexing process. (document cracking, field mappings, skillset execution, output fields mappings, push into index)
+   - `Microsoft.Skills.Util.DocumentExtractionSkill` is the built-in skill used to extract content from a file within the enrichment pipeline.
+   - `name`, `description`, and `skills` are required for defining `skillset`
+   - document intelligence supports pdf, and microsoft office files
+   - The system message is included at the beginning of the prompt and is used to prime the model with context, instructions, or other information relevant to the use case. You can use the system message to describe the assistant’s personality, define what the model should and should not answer, and define the format of model responses.
+   - When the retirement date is reached, the model will upgrade to the default version automatically at the time of retirement.
+   - for DAll-E, The result from the initial request does not immediately return the results of the image generation process. Instead, the response includes an `operation-location` header with a URL for a callback service that your application code can poll until the results of the image generation are ready. The `result` element includes a collection of `url` elements, each of which references a PNG image file generated from the prompt.
+   - to make http requests to azure openai dall-e model api, you need to ensure that http headers includes `api version`,`name of azure openai service resource`,`name of dall-e model deployment`
+   - when making http requests to azure openai dall-e model API, the body is the prompt
+   - Azure OpenAI on your data enables developers to use supported AI chat models that can reference specific sources of information to ground the response. Adding this information allows the model to reference both the specific data provided and its pretrained knowledge to provide more effective responses.
+   - The Strictness parameter sets the threshold to categorize documents as relevant to your queries. Raising the Strictness parameter value means a higher threshold for relevance and filters out more less-relevant documents for responses.
+   - for prompting: `Be Specific` means to leave as little to interpretation as possible. `Be Descriptive` means to use analogies. `Order Matters` means that the order in which you present information to the model can affect the output. Therefore, those three are valid best practices.
+
+
+
+
+
+
+
+
