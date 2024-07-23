@@ -8,6 +8,7 @@
  - [Develop solutions with Azure AI Document Intelligence](#develop-solutions-with-azure-ai-document-intelligence)
  - [Develop Generative AI solutions with Azure OpenAI Service](#develop-generative-ai-solutions-with-azure-openai-service)
  - [Assessments](#assessments)
+ - [ExamTopics](#examtopics)
 
 ## Get started with Azure AI Services
 
@@ -676,7 +677,41 @@
 
 
 
-
+## ExamTopics
+ - to add phrases to language understanding models, using `AddPhraseListAsync` and `PhraselistCreateObject`.
+ - to deploy a model to a docker container, first choose the latest trained or published model, then export it using `export for containers(gzip)` option, then run the container and mount the model.
+ - QnA maker: chit-chat, knowledge base, multilingual models; Language Understanding: understand user intent and semantic analysis; Dispatch: automatically choose the best language model based on user input.
+ - `Form Recognizer`: a cognitive service to extract information from different kind of documents.
+ - when creating a new resource in azure, using PUT instead of POST
+ - to containerize a custom azure service image:
+   - create a custom dockerfile
+   - build this custom image
+   - push to ACR
+   - distribute a `docker run` script
+ - docker run command for running an azure virtual machine, first, the specify the image such as `mcr.microstof.com/azure-cognitive-services/...`, then for billing, specify the endpoint of the service like `https://contoso.cognitiveservices...`
+ - to create a free, image caption generating service: `create_resource(client, 'res1','computervision','f0',''westus)`
+ - `regenerateKey` http request is to generate a new key(primary key or secondary key)
+ - form recognizer:
+   - format: jpg, pdf, bmp, png
+   - size: 500mb for s0, 4mb for f0
+   - < 500 pages
+   - dimensions: 50*50 , 10000*10000
+ - using CMK, then azure key vault is needed, also query time will increase, and cmk will increase index size by encrypting data(twice).
+ - norifying users that their data is being processed will help meet transparency.
+ - by default audio stream format is WAV, so for mp3 format, we need to pass compressed audio format, which is `AudioStreamFormat.GetCompressedFormat.` for `speechRecognizer`
+ - when provisioning QnA maker, a storage account will be created as well as cognitive search resource automatically
+ - for collaborating with other people for language understanding resource, we use IAM for authoring resources in the azure portal.
+ - a simple fix to most throttling issues to throw more resources at the search service(more replicas, or partitions)
+ - speech-to-text also detect the incoming language
+ - `StartRecognizeContentFromUri` is used to extract layout information, while `StartRecognizeReceiptsFromUri` is specifically designed to extract information from receipts
+ - A multi-service resource references "Cognitive Services" as the offering, rather than individual services.
+ - `Direct Line Speech` lets the bot speak out loud, which meets the principle of inclusiveness.
+ - for Microsoft BI, the table works best with this tool.(form recognizer -> OCR -> shaper skill-> table projection -> power BI)
+ - searchable(allows to apply full-text search on), facetable(allows to apply drill-down filtering based on the field), retrievable(included in the response)
+ - The API call you should perform to provide an output in complete sentences for users who are vision impaired is `describeImageInStreamAsync`. The describe feature of the Computer Vision API generates a human-readable sentence to describe the contents of an image.
+ - if need to export custom vision model to a network that is disconnected from the internet, then first cahnge domains to `general(compact)`, then retrain the model, then export the model
+ - To ensure that the AI solution meets the Microsoft responsible AI principles, you should: add a human review and approval step before making decisions that affect the staff's financial situation. This option aligns with the responsible AI principle of fairness and accountability.
+ - Multivariate Anomaly detection: when there are multiple metrics that need to be monitor (or metrics advisor) 
 
 
 
