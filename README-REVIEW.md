@@ -699,7 +699,7 @@
  - using CMK, then azure key vault is needed, also query time will increase, and cmk will increase index size by encrypting data(twice).
  - norifying users that their data is being processed will help meet transparency.
  - by default audio stream format is WAV, so for mp3 format, we need to pass compressed audio format, which is `AudioStreamFormat.GetCompressedFormat.` for `speechRecognizer`
- - when provisioning QnA maker, a storage account will be created as well as cognitive search resource automatically
+ - when provisioning QnA maker, an app service will be created as well as cognitive search resource automatically
  - for collaborating with other people for language understanding resource, we use IAM for authoring resources in the azure portal.
  - a simple fix to most throttling issues to throw more resources at the search service(more replicas, or partitions)
  - speech-to-text also detect the incoming language
@@ -709,10 +709,62 @@
  - for Microsoft BI, the table works best with this tool.(form recognizer -> OCR -> shaper skill-> table projection -> power BI)
  - searchable(allows to apply full-text search on), facetable(allows to apply drill-down filtering based on the field), retrievable(included in the response)
  - The API call you should perform to provide an output in complete sentences for users who are vision impaired is `describeImageInStreamAsync`. The describe feature of the Computer Vision API generates a human-readable sentence to describe the contents of an image.
- - if need to export custom vision model to a network that is disconnected from the internet, then first cahnge domains to `general(compact)`, then retrain the model, then export the model
+ - if need to export custom vision model to a network that is disconnected from the internet, then first change domains to `general(compact)`, then retrain the model, then export the model
  - To ensure that the AI solution meets the Microsoft responsible AI principles, you should: add a human review and approval step before making decisions that affect the staff's financial situation. This option aligns with the responsible AI principle of fairness and accountability.
- - Multivariate Anomaly detection: when there are multiple metrics that need to be monitor (or metrics advisor) 
-
-
+ - Multivariate Anomaly detection: when there are multiple metrics that need to be monitor (or metrics advisor)
+ - `docker run --rm -it -p 5000:5000 --memory 4g --cpus 1 \
+mcr.microsoft.com/azure-cognitive-services/decision/anomaly-detector:latest \
+Eula=accept \
+Billing={ENDPOINT_URI} \
+ApiKey={API_KEY}`: when trying to run azure ai service instance in docker env, we have to specify the `billing`, `apikey` arguments
+ - To authenticate with Speech resource keys, all you need is the key and region. To authenticate with a **Microsoft Entra token**, the Speech resource must have a `custom subdomain` and use a `private endpoint`. The Speech service uses custom subdomains with private endpoints only.
+ - azure openai: to manage how frequently your app can make requests, 1 `capacity` = 1,000 TPM(token-per-minute), and for every 1,000 TPM, you can make 6 RPM(request-per-minute), so to make 600 RPM, it should set `capacity` to 100.
+ - `apikey` is the recommended way to authenticate apps for azure ai services.
+ - `endpoint`,`apikey`,`deployment name`
+ - virtual network rules configure ip range to restrict access to an endpoint of services.
+ - In VNet1, enable a service endpoint for CSAccount1. This allows you to secure your Azure service resources to the virtual network. In CSAccount1, modify the virtual network settings. This will allow you to configure CSAccount1 to accept connections only from the virtual network VNet1.
+ - video indexer: player widget (show caption, captions), insights widget(controls, widgets)
+ - change model domain, retrain model, test model, then export model
+ - `westus.api.cognitive.microsoft.com`
+ - Form Recognizer is composed of custom document processing models, prebuilt models for invoices, receipts, IDs and business cards, and the layout model.
+ - custom vision: to move a project(a model) from one env to another, first `getprojects`, then `exportprojects`, then `importprojects`
+ - to train a custom vision model: first create a project, then upload and tag the images, then train the classifier model
+ - for video indexer, if we wanna search a video based on who is present in the video, then create a `Person` model (video indexer supports multiple `Person` models per account). Once a model is created, you can use it by providing the model ID of a specific Person model when uploading/indexing or reindexing a video. Training a new face for a video updates the specific custom model that the video was associated with.
+ - `faceListid`: add a face to a list, up to 1,000 faces.
+ - `LargeFaceListid`: add a face to a list, up to 1,000,000 faces
+ - `matchPerson`: find faces of the same person
+ - `matchFace`: find similar faces, no matter if it is the same person
+ - `/detect`: detect human faces in images
+ - the bounding box --> top-left corner coordinates, width and height.
+ - to add faces(images) to a `Person` group, `httpclient.postAsync()`
+ - The best way to compare the performances of the detection models is to use them on a sample dataset.
+ - to manage your Computer Vision containers on-premises is to use Kubernetes and Helm if you wanna your solution to be private
+ - Call the face detection API and retrieve the face rectangle by using the FaceRectangle attribute to validate if they are real people.
+ - when indexing the documents and images in the storage account, we can configure `parallel indexing` if we wanna minimize the time it takes. all indexers can have the same skillset and write into the same target search index, so the client side app wont be aware of this partitioning.
+ - when sending images to document intelligence, make sure it is in `raw image binary` format
+ - precision and recall:
+   - precision: true-positive  / (true-positive + false-positive)
+   - recall: true-positive / (true-positive + false-negative) 
+ - when training language model for azure ai video indexer, **txt** files are a suitable format for the service
+ - web portals:
+   - azure ai Vision: vision studio
+   - azure custom vision: customvision.ai
+ - `TranslationRecognizer`, `SpeakerRecognizer`,`SpeechSynthesizer`
+ - to train a custom image classification model with custom vision:
+   - categorize images locally
+   - upload images and manually tag them
+   - train the model
+ - for Language understanding(LUIS: deprecated), entity types: regex(flight number, credit card, address); for ai language(new), we have NER(named entity recognizer) which has category:address
+ - when running azure ai service instances in docker env, `http:localhost:5000/status` will verify if the api key is valid with the container, `http:localhost:5000/swagger` provides a full set of documentation for the endpoints. If you run the container with an output mount and logging enabled, the container generates log files that are helpful to troubleshoot issues that happen while starting or running the container.
+ - for a speech studio project: uploading audios(wma format), human-labeled transcripts
+ - for translation uri, parameters: `to`,`textType`(HTML,...),`toScript`(transliteration)
+ - Active learning is a technique of machine learning in which the machine learned model is used to identify informative new examples to label. In LUIS, active learning refers to adding utterances from the endpoint traffic whose current predictions are unclear to improve your model.
+ - azure service endpoints:
+   - global: `api.cognitive.microsofttranslator.com`
+   - America: `api-nam.cognitive.microsofttranslator.com`
+   - asia pacific: `api-apc.cognitive.microsofttranslator.com`
+   - Europe: `api-eur.cognitive.microsofttranslator.com`
+ - azure ai search does not support local database, so we need to export on-prem data to one of those supported locations, like azure data lake storage
+ - for azure ai language, when making rest api requests, we can use `loggingOptOut` to prevent resource from persisting input data once the data is analyzed ( normally, the data will be stored by azure ai language for up to 48 hrs and is purged thereafter)
 
 
