@@ -766,5 +766,12 @@ ApiKey={API_KEY}`: when trying to run azure ai service instance in docker env, w
    - Europe: `api-eur.cognitive.microsofttranslator.com`
  - azure ai search does not support local database, so we need to export on-prem data to one of those supported locations, like azure data lake storage
  - for azure ai language, when making rest api requests, we can use `loggingOptOut` to prevent resource from persisting input data once the data is analyzed ( normally, the data will be stored by azure ai language for up to 48 hrs and is purged thereafter)
+ - endpoint for custom neural voices: `https://australiaeast.voice.speech.microsoft.com/cognitiveservices/v1?deploymentId={deploymentId}`
+ - endpoint for long audio API: `https://australiaeast.customvoice.api.speech.microsoft.com`
+ - endpoint for prebuilt neural voices: `https://australiaeast.tts.speech.microsoft.com/cognitiveservices/v1`
+ - Adding follow-up prompts to engage in multi-turn conversations
+ - the response for `linked entity recognizer` has entities[], in which there is a `url`(the link), and a `matches`[] which includes locations where the entity is referenced in the document
+ - to view the conversational language understanding model performance, from `language studio`, view `model performance`, and from language authoring `rest` endpoint, retrieve the model evaluation summary.
+ - in azure ai speech, there is a `speech translation`, for configuration, `addTargetLanguage`, `speechSynthesisLanguage`
 
 
