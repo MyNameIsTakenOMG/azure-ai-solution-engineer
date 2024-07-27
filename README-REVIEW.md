@@ -675,6 +675,45 @@
    - The Strictness parameter sets the threshold to categorize documents as relevant to your queries. Raising the Strictness parameter value means a higher threshold for relevance and filters out more less-relevant documents for responses.
    - for prompting: `Be Specific` means to leave as little to interpretation as possible. `Be Descriptive` means to use analogies. `Order Matters` means that the order in which you present information to the model can affect the output. Therefore, those three are valid best practices.
 
+ - 2nd test:
+   - azure ai custom vision does not offer OCR
+   - to retrieve the endpoint of your resource, you need to provide the name and the resource group
+   - `mismatch`: wrong api key for the specific resource
+   - `invalid`: wrong api key for the specific region
+   - for image analysis, the feature `objects` used to identify the objects and bounding boxes in the image, the feature `description` used to return a description of the image content
+   - face detection models:
+     - `detection_01`: default
+     - `detection_02`: better
+     - `detection_03`: more better 
+   - for azure ai video indexer content models:
+     - custom brands: detect brands from speech and visuals
+     - slate detection: clapper boards and digital patterns with color bars
+     - custom language model: add words that are not in the model. Also, be sure for the files uploaded, remove the special characters or the whole sentence will be discarded.
+       - three practices: `one sentence per line`; `multiple examples of spoken sentences`; `multiple adaption options`
+   - to enable multilingual identification when using azure ai video indexer, configure `sourceLanguage` to `multi-language detection`
+   - to apply sentiment analysis on social media feedback, configure api requests with parameter `opinionMining=true`(add aspect-based sentiment analysis, which in turn will make the sentiment more granular). while the option `StringIndexType=TextElements_v8` will set the returned offset and length values to correspond with `TextElements`.
+   - Azure Storage is the only storage provider that can be used by default for batch transcription.
+   - The List entity is made up of a list of phrases that will guide the engine on how to match the text. When an entity has an ID of type List and is in Strict mode, the engine will only match if the text in the slot appears in the list.
+   - The only option is to use pattern matching over Language Understanding when you want to strictly match what a user said
+   - A BLEU score is a number between zero and 100. (azure ai translator service)
+   - the training methods for CLU (conversational language understanding) are `standard` and `advanced`
+   - Orchestration workflow projects do not support the multilingual option, so you need to create a separate workflow project for each language.
+   - The precision metric reveals how many of the predicted classes are correctly labeled.
+   - Recall measures the model's ability to predict actual positive classes.
+   - F1 score is a function of precision and recall.
+   - when building an orchestration workflow, you can connect to your `question answering projects` or `language understanding applications`
+   - when configuring question answering solution, the synonyms can be added in any order, but no special characters allowed
+   - for question answering solution, the formatted text, URLs, bulleted and numbered lists are supported, but images are not supported
+   - `facetable` is typically used in a presentation of search results that includes a hit count by category.
+   - the ai search indexing process: Document cracking, field mapping, skillset execution, and output field mapping
+   - queryType “full” extends the default Simple query language by adding support for more operators and query types, such as wildcard, fuzzy, regex, and field-scoped queries.
+   - `Microsoft.Skills.Text.V3.EntityLinkingSkill` uses a pretrained model to generate links for recognized entities to articles in Wikipedia.
+   - when working with Dall-E, The result from the initial request does not immediately return the results of the image generation process. Instead, the response includes an `operation-location` header with a `URL` for a callback service that your application code can poll until the results of the image generation are ready. The `result` element includes a collection of `url` elements, each of which references a PNG image file generated from the prompt.
+   - when working with dall-e, the http request header should include: `api version`,`resource name`,`deployment name`
+   - when working with azure openai service, the `azure openai on your data` allows to use RAG technique, and the support file types: `html`,`md`,`pdf`,`text`, `microsoft office files`
+   - prompt engineering strategies used to test use gpt-based app on azure are `be descriptive`, `be specific`, `orders matters`
+    
+
 
 
 ## ExamTopics
