@@ -731,6 +731,10 @@
    - Question answering only works with static information, not with dynamic information. In addition, it will always provide the same answer to the same question.
    - when using azure openai service, the `strictness` parameter sets the threshold to categorize documents as relevant to your queries. 
 
+ - 4th test
+   - azure ai vision, for OCR, face, image analysis, they are meant for images, while for video analysis (spatial analysis), it is for videos
+   - for azure ai document intelligence: pdf, excel, word file
+   - for azure openai 'using your own data': txt, md, html, pdf, word, ppt
 
 
 ## ExamTopics
