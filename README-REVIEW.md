@@ -735,6 +735,10 @@
    - azure ai vision, for OCR, face, image analysis, they are meant for images, while for video analysis (spatial analysis), it is for videos
    - for azure ai document intelligence: pdf, excel, word file
    - for azure openai 'using your own data': txt, md, html, pdf, word, ppt
+ - 5th test
+   - to get the keyframe thumbnail from a video using azure ai video indexer:
+     - via azure portal, upload the video and then download the zip file of thumbnails
+     - via apis, upload the video, get the video index(to know the correct parameters for the thumbnail request), get the thumbnail for key frames
 
 
 ## ExamTopics
